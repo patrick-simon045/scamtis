@@ -15,10 +15,13 @@ if READ_DOT_ENV_FILE:
     environ.Env.read_env()
 
 # False if not in os.environ
-DEBUG = env('DEBUG')
+# DEBUG = env('DEBUG')
+DEBUG = False
 
 # Raises django's ImproperlyConfigured exception if SECRET_KEY not in os.environ
-SECRET_KEY = env('SECRET_KEY')
+# SECRET_KEY = env('SECRET_KEY')
+SECRET_KEY = 'django-insecure-=hp_^(71ngjh1ppqz^vvt7p#ee!d^g+6jw6i0^u)b^_8cc79y6'
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
