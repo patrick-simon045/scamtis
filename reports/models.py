@@ -43,6 +43,9 @@ class Program_Course(models.Model):
     def __str__(self):
         pass
 
+    class Meta:
+        unique_together = ['course', 'program', 'year_of_study']
+
 
 class Lecturer(models.Model):
     user = models.OneToOneField(
@@ -70,6 +73,9 @@ class Lecture_Course(models.Model):
 
     def __str__(self):
         pass
+
+    class Meta:
+        unique_together = ['lecturer', 'course', 'academic_year']
 
 
 class Role(models.Model):
@@ -123,6 +129,10 @@ class Assessment(models.Model):
     def __str__(self):
         return f'{self.criteria} {self.academic_year}'
 
+    class Meta:
+        unique_together = ['course', 'contribution',
+                           'criteria', 'academic_year', 'date_taken', 'total_mark', 'number_of_questions']
+
 
 class Assessment_Results(models.Model):
     score = models.IntegerField(validators=MaxValueValidator(100))
@@ -138,6 +148,10 @@ class Assessment_Results(models.Model):
 
     def __unicode__(self):
         return
+
+    class Meta:
+        unique_together = ['score', 'total_score',
+                           'question_number', 'student', 'assessment']
 
 
 class UE(models.Model):
@@ -160,6 +174,10 @@ class UE(models.Model):
     def __unicode__(self):
         return
 
+    class Meta:
+        unique_together = ['course', 'exam_type', 'academic_year',
+                           'date_taken', 'total_mark', 'number_of_questions']
+
 
 class UE_Results(models.Model):
     score = models.IntegerField(validators=MaxValueValidator(100))
@@ -175,3 +193,7 @@ class UE_Results(models.Model):
 
     def __unicode__(self):
         return
+
+    class Meta:
+        unique_together = ['score', 'total_score',
+                           'question_number', 'student', 'ue']
