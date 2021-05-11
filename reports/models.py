@@ -124,21 +124,54 @@ class Assessment(models.Model):
         return f'{self.criteria} {self.academic_year}'
 
 
-class Result(models.Model):
-    score = models.PositiveIntegerField(
-        validators=[MaxValueValidator(100), MinValueValidator(0)])
-    code = models.ForeignKey(
-        'Course', related_name='result', on_delete=models.CASCADE)
-    student = models.ForeignKey("Student", verbose_name=(
-        "student"), on_delete=models.CASCADE)
-
-    class Meta:
-        verbose_name = ("result")
-        verbose_name_plural = ("results")
-        unique_together = ['code', 'student']
+class Assessment_Results(models.Model):
+    score = models.IntegerField(validators=MaxValueValidator(100))
+    total_score = models.IntegerField(validators=MaxValueValidator(100))
+    question_number = models.IntegerField(validators=[MinValueValidator(1)])
+    student = models.ForeignKey(
+        'Student', related_name='result', on_delete=models.CASCADE)
+    assessment = models.ForeignKey(
+        'Assessment', related_name='result', on_delete=models.CASCADE)
 
     def __str__(self):
-        return f'{self.code} results'
+        return
 
-    def get_absolute_url(self):
-        return reverse("result_detail", kwargs={"pk": self.pk})
+    def __unicode__(self):
+        return
+
+
+class UE(models.Model):
+    exam_type = models.CharField(max_length=30)
+    course = models.ForeignKey(
+        'Course', related_name='assessment', on_delete=models.CASCADE)
+    academic_year = models.CharField(max_length=5)
+    date_taken = models.DateTimeField(verbose_name='Date', auto_now_add=True)
+    total_mark = models.IntegerField(verbose_name='Total marks',
+                                     validators=[MaxValueValidator(100), MinValueValidator(0)])
+    number_of_questions = models.IntegerField(
+        validators=[MinValueValidator(1)])
+
+    def __str__(self):
+        return f'{self.criteria} {self.academic_year}'
+
+    def __str__(self):
+        return
+
+    def __unicode__(self):
+        return
+
+
+class UE_Results(models.Model):
+    score = models.IntegerField(validators=MaxValueValidator(100))
+    total_score = models.IntegerField(validators=MaxValueValidator(100))
+    question_number = models.IntegerField(validators=[MinValueValidator(1)])
+    student = models.ForeignKey(
+        'Student', related_name='result', on_delete=models.CASCADE)
+    ue = models.ForeignKey(
+        'UE', related_name='result', on_delete=models.CASCADE)
+
+    def __str__(self):
+        return
+
+    def __unicode__(self):
+        return
