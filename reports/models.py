@@ -43,9 +43,6 @@ class Program_Course(models.Model):
     def __str__(self):
         pass
 
-    def __unicode__(self):
-        pass
-
 
 class Lecturer(models.Model):
     user = models.OneToOneField(
@@ -72,9 +69,6 @@ class Lecture_Course(models.Model):
     academic_year = models.CharField(max_length=5)
 
     def __str__(self):
-        pass
-
-    def __unicode__(self):
         pass
 
 
