@@ -3,7 +3,10 @@ from django.contrib.auth import get_user_model
 
 User = get_user_model()
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> f161519c885dbbd74d63bb4f7868fb2c4b2e5068
 class UserCreationForm(forms.ModelForm):
     password1 = forms.CharField(label='Password', widget=forms.PasswordInput)
     password2 = forms.CharField(
@@ -11,7 +14,11 @@ class UserCreationForm(forms.ModelForm):
 
     class Meta:
         model = User
+<<<<<<< HEAD
         fields = ['username', ]
+=======
+        fields = ['username',]
+>>>>>>> f161519c885dbbd74d63bb4f7868fb2c4b2e5068
 
     def clean_password(self):
         password1 = self.cleaned_data.get('password1')
@@ -26,4 +33,8 @@ class UserCreationForm(forms.ModelForm):
 
         if commit:
             user.save()
+<<<<<<< HEAD
         return user
+=======
+        return user
+>>>>>>> f161519c885dbbd74d63bb4f7868fb2c4b2e5068

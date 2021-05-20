@@ -63,6 +63,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'fyp.wsgi.application'
 
 
+<<<<<<< HEAD
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.sqlite3',
@@ -82,6 +83,13 @@ DATABASES = {
             'driver': 'ODBC Driver 17 for SQL Server',
         },
     },
+=======
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+>>>>>>> f161519c885dbbd74d63bb4f7868fb2c4b2e5068
 }
 
 

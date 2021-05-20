@@ -2,6 +2,7 @@ from reports import forms
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 # from django.contrib.auth.models import Group
 from django.contrib import admin
+<<<<<<< HEAD
 from reports.models import *
 
 
@@ -85,6 +86,14 @@ class UE_ResultsAdmin(admin.ModelAdmin):
 admin.site.register(UE_Results, UE_ResultsAdmin)
 
 
+=======
+from django.contrib.auth.models import Group
+from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
+from reports import forms
+from reports.models import *
+
+
+>>>>>>> f161519c885dbbd74d63bb4f7868fb2c4b2e5068
 class UserAdmin(BaseUserAdmin):
     add_form = forms.UserCreationForm
 
@@ -99,7 +108,12 @@ class UserAdmin(BaseUserAdmin):
     ordering = ('username', )
 
     filter_horizontal = ()
+<<<<<<< HEAD
 
 
 admin.site.register(User, UserAdmin)
 # admin.site.unregister(Group)
+=======
+admin.site.register(User, UserAdmin)
+admin.site.unregister(Group)
+>>>>>>> f161519c885dbbd74d63bb4f7868fb2c4b2e5068

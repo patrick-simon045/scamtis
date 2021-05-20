@@ -48,6 +48,9 @@ class Program_Course(models.Model):
         verbose_name = ("course in program")
         verbose_name_plural = ("courses in certain program")
 
+    class Meta:
+        unique_together = ['course', 'program', 'year_of_study']
+
 
 class Lecturer(models.Model):
     user = models.OneToOneField(
@@ -80,6 +83,9 @@ class Lecture_Course(models.Model):
         unique_together = ['lecturer', 'course', 'academic_year']
         verbose_name = ("course and lecture")
         verbose_name_plural = ("courses and lectures")
+
+    class Meta:
+        unique_together = ['lecturer', 'course', 'academic_year']
 
 
 class Role(models.Model):
@@ -160,6 +166,10 @@ class Assessment_Results(models.Model):
         verbose_name = ("assessment result")
         verbose_name_plural = ("assessment results")
 
+    class Meta:
+        unique_together = ['score', 'total_score',
+                           'question_number', 'student', 'assessment']
+
 
 class UE(models.Model):
     exam_type = models.CharField(max_length=30)
@@ -181,6 +191,10 @@ class UE(models.Model):
         verbose_name = ("University Exam")
         verbose_name_plural = ("University Exams")
 
+    class Meta:
+        unique_together = ['course', 'exam_type', 'academic_year',
+                           'date_taken', 'total_mark', 'number_of_questions']
+
 
 class UE_Results(models.Model):
     score = models.IntegerField(validators=[MaxValueValidator(100)])
@@ -194,8 +208,17 @@ class UE_Results(models.Model):
     def __str__(self):
         return 'ue results'
 
+<<<<<<< HEAD
     class Meta:
         unique_together = ['score', 'total_score',
                            'question_number', 'student', 'ue']
         verbose_name = ("University Exam Result")
         verbose_name_plural = ("University Exam Results")
+=======
+    def __unicode__(self):
+        return
+
+    class Meta:
+        unique_together = ['score', 'total_score',
+                           'question_number', 'student', 'ue']
+>>>>>>> f161519c885dbbd74d63bb4f7868fb2c4b2e5068
