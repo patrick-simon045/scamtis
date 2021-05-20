@@ -45,6 +45,8 @@ class Program_Course(models.Model):
 
     class Meta:
         unique_together = ['course', 'program', 'year_of_study']
+        verbose_name = ("course in program")
+        verbose_name_plural = ("courses in certain program")
 
 
 class Lecturer(models.Model):
@@ -58,7 +60,7 @@ class Lecturer(models.Model):
         verbose_name_plural = ("lecturers")
 
     def __str__(self):
-        return self.user.last_name
+        return self.user.username
 
     def get_absolute_url(self):
         return reverse("lecturer_detail", kwargs={"pk": self.pk})
@@ -76,6 +78,8 @@ class Lecture_Course(models.Model):
 
     class Meta:
         unique_together = ['lecturer', 'course', 'academic_year']
+        verbose_name = ("course and lecture")
+        verbose_name_plural = ("courses and lectures")
 
 
 class Role(models.Model):
@@ -110,6 +114,10 @@ class Assessment_Criteria(models.Model):
 
     def __str__(self):
         return self.criteria_name
+
+    class Meta:
+        verbose_name = ("assessment criteria")
+        verbose_name_plural = ("assessment criterias")
 
 
 class Assessment(models.Model):
@@ -149,6 +157,8 @@ class Assessment_Results(models.Model):
     class Meta:
         unique_together = ['score', 'total_score',
                            'question_number', 'student', 'assessment']
+        verbose_name = ("assessment result")
+        verbose_name_plural = ("assessment results")
 
 
 class UE(models.Model):
@@ -168,6 +178,8 @@ class UE(models.Model):
     class Meta:
         unique_together = ['course', 'exam_type', 'academic_year',
                            'date_taken', 'total_mark', 'number_of_questions']
+        verbose_name = ("University Exam")
+        verbose_name_plural = ("University Exams")
 
 
 class UE_Results(models.Model):
@@ -185,3 +197,5 @@ class UE_Results(models.Model):
     class Meta:
         unique_together = ['score', 'total_score',
                            'question_number', 'student', 'ue']
+        verbose_name = ("University Exam Result")
+        verbose_name_plural = ("University Exam Results")

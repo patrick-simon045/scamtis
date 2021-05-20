@@ -63,11 +63,25 @@ TEMPLATES = [
 WSGI_APPLICATION = 'fyp.wsgi.application'
 
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+        'ENGINE': 'sql_server.pyodbc',
+        'NAME': 'fypDB',
+        # 'USER': 'user@myserver',
+        # 'PASSWORD': 'password',
+        # 'HOST': 'myserver.database.windows.net',
+        # 'PORT': '',
+
+        'OPTIONS': {
+            'driver': 'ODBC Driver 17 for SQL Server',
+        },
+    },
 }
 
 
