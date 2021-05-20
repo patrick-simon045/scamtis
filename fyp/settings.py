@@ -1,15 +1,9 @@
-import environ
 from pathlib import Path
 import os
 import django_heroku
-import dj_database_url
-import dotenv
 
 
-BASE_DIR = Path(__file__).resolve().parent.parent
-dotenv_file = os.path.join(BASE_DIR, ".env")
-if os.path.isfile(dotenv_file):
-    dotenv.load_dotenv(dotenv_file)
+
 
 
 DEBUG = True
@@ -63,7 +57,6 @@ TEMPLATES = [
 WSGI_APPLICATION = 'fyp.wsgi.application'
 
 
-<<<<<<< HEAD
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.sqlite3',
@@ -83,18 +76,10 @@ DATABASES = {
             'driver': 'ODBC Driver 17 for SQL Server',
         },
     },
-=======
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
->>>>>>> f161519c885dbbd74d63bb4f7868fb2c4b2e5068
 }
 
 
-# DATABASES = {}
-# DATABASES['default'] = dj_database_url.config(conn_max_age=600)
+
 
 
 AUTH_PASSWORD_VALIDATORS = [
@@ -124,7 +109,6 @@ USE_L10N = True
 USE_TZ = True
 
 
-# PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
@@ -133,5 +117,4 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 AUTH_USER_MODEL = 'reports.User'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 django_heroku.settings(locals())
-# options = DATABASES['default'].get('OPTIONS', {})
-# options.pop('sslmode', None)
+

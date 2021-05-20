@@ -208,17 +208,8 @@ class UE_Results(models.Model):
     def __str__(self):
         return 'ue results'
 
-<<<<<<< HEAD
     class Meta:
         unique_together = ['score', 'total_score',
                            'question_number', 'student', 'ue']
         verbose_name = ("University Exam Result")
         verbose_name_plural = ("University Exam Results")
-=======
-    def __unicode__(self):
-        return
-
-    class Meta:
-        unique_together = ['score', 'total_score',
-                           'question_number', 'student', 'ue']
->>>>>>> f161519c885dbbd74d63bb4f7868fb2c4b2e5068
