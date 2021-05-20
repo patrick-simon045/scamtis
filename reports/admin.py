@@ -84,6 +84,12 @@ class UE_ResultsAdmin(admin.ModelAdmin):
 admin.site.register(UE_Results, UE_ResultsAdmin)
 
 
+@admin.register(Lecture_Course)
+class Lecture_CourseAdmin(admin.ModelAdmin):
+    pass
+    # list_display = ('',)
+
+
 class UserAdmin(BaseUserAdmin):
     add_form = forms.UserCreationForm
 
