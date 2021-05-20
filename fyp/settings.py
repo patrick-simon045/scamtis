@@ -3,14 +3,12 @@ import os
 import django_heroku
 
 
-
-
-
 DEBUG = True
 
 
 SECRET_KEY = 'django-insecure-=hp_^(71ngjh1ppqz^vvt7p#ee!d^g+6jw6i0^u)b^_8cc79y6'
 
+BASE_DIR = Path(__file__).resolve().parent.parent
 
 ALLOWED_HOSTS = ['*']
 
@@ -57,29 +55,26 @@ TEMPLATES = [
 WSGI_APPLICATION = 'fyp.wsgi.application'
 
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
 DATABASES = {
     'default': {
-        'ENGINE': 'sql_server.pyodbc',
-        'NAME': 'fypDB',
-        # 'USER': 'user@myserver',
-        # 'PASSWORD': 'password',
-        # 'HOST': 'myserver.database.windows.net',
-        # 'PORT': '',
-
-        'OPTIONS': {
-            'driver': 'ODBC Driver 17 for SQL Server',
-        },
-    },
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
 }
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'sql_server.pyodbc',
+#         'NAME': 'fypDB',
+# 'USER': 'user@myserver',
+# 'PASSWORD': 'password',
+# 'HOST': 'myserver.database.windows.net',
+# 'PORT': '',
 
-
-
+#         'OPTIONS': {
+#             'driver': 'ODBC Driver 17 for SQL Server',
+#         },
+#     },
+# }
 
 
 AUTH_PASSWORD_VALIDATORS = [
@@ -117,4 +112,3 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 AUTH_USER_MODEL = 'reports.User'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 django_heroku.settings(locals())
-
