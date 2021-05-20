@@ -77,7 +77,7 @@ class Lecture_Course(models.Model):
     academic_year = models.CharField(max_length=5)
 
     def __str__(self):
-        return f'{self.course.course_code} taught by {self.lecturer.first_name}'
+        return f'{self.course.course_code} taught by {self.lecturer.user.username}'
 
     class Meta:
         unique_together = ['lecturer', 'course', 'academic_year']
