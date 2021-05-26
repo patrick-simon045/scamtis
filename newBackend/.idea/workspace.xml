@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="07702d9d-9826-4868-8604-7487e975a5c3" name="Default Changelist" comment="" />
+    <list default="true" id="07702d9d-9826-4868-8604-7487e975a5c3" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backendapi/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/backendapi/admin.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backendapi/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/backendapi/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backendapi/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/backendapi/serializers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backendapi/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/backendapi/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backendapi/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/backendapi/views.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -20,6 +27,7 @@
     <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
   </component>
   <component name="RecentsManager">
