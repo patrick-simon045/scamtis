@@ -10,7 +10,6 @@ function App() {
         <Switch>
           <Route path="/home" component={Home} />
           <Route path="/" component={NormalLoginForm} />
-          {/* <Home /> */}
         </Switch>
       </Router>
     </div>
