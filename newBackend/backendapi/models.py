@@ -272,8 +272,6 @@ class Result(models.Model):
         MinValueValidator(0),
     ])
 
-    # sum = models.IntegerField(null=True)
-
     @property
     def sum(self):
         sum = self.first_question + self.second_question + self.third_question + self.fourth_question
