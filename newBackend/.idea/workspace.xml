@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="07702d9d-9826-4868-8604-7487e975a5c3" name="Default Changelist" comment="" />
+    <list default="true" id="07702d9d-9826-4868-8604-7487e975a5c3" name="Default Changelist" comment="models modification" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -20,6 +20,7 @@
     <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
   </component>
   <component name="RecentsManager">
@@ -37,6 +38,14 @@
       <option name="presentableId" value="Default" />
       <updated>1620472172945</updated>
     </task>
+    <task id="LOCAL-00001" summary="models modification">
+      <created>1622027522642</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1622027522642</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -50,5 +59,9 @@
       </map>
     </option>
     <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="models modification" />
+    <option name="LAST_COMMIT_MESSAGE" value="models modification" />
   </component>
 </project>

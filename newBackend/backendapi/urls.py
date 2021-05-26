@@ -5,5 +5,5 @@ from . import views
 
 router = routers.DefaultRouter()
 router.register(r'results', views.ResultsViewset)
-router.register(r'assessmentCriteria', views.AssessmentCriteriaViewset)
+router.register(r'assessmentCriteria', views.CA_ItemsViewset)
 

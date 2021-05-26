@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Result, Assessment_Criteria, Lecture_Course
+from .models import Result, CA_Item, Lecture_Course
 
 
 class ResultSerializer(serializers.ModelSerializer):
@@ -8,9 +8,9 @@ class ResultSerializer(serializers.ModelSerializer):
         fields = ['id', 'name', 'first_question', 'second_question', 'third_question', 'fourth_question']
 
 
-class AssessmentCriteriaSerializer(serializers.ModelSerializer):
+class CA_ItemSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Assessment_Criteria
+        model = CA_Item
         fields = ['criteria_name']
 
 

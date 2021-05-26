@@ -31,11 +31,11 @@ class Course(models.Model):
         return reverse("course_detail", kwargs={"pk": self.pk})
 
 
-class Assessment_Criteria(models.Model):
-    criteria_name = models.CharField(max_length=20, primary_key=True)
+class CA_Item(models.Model):
+    ca_item_name = models.CharField(max_length=20, primary_key=True)
 
     def __str__(self):
-        return self.criteria_name
+        return self.ca_item_name
 
 
 class Lecturer(models.Model):
@@ -44,7 +44,7 @@ class Lecturer(models.Model):
     # role_name = models.CharField(max_length=20, null=False, default='Lecturer')
     role = models.ForeignKey(Role, on_delete=models.PROTECT, null=True)
     course = models.ManyToManyField(Course, through='Lecture_Course')
-    criteria = models.ManyToManyField(Assessment_Criteria, through='LecturerCriteria')
+    criteria = models.ManyToManyField(CA_Item, through='LecturerCriteria')
 
     def __str__(self):
         return str(self.lecturer)
@@ -83,45 +83,47 @@ class Program(models.Model):
 
 
 class Program_Course(models.Model):
-    course = models.ForeignKey(
-        'Course', on_delete=models.CASCADE)
-    program = models.ForeignKey(
-        'Program', on_delete=models.CASCADE)
-    year_of_study = models.IntegerField(validators=[
-        MaxValueValidator(4),
-        MinValueValidator(1),
-    ], default=1)
-
-    # def __str__(self):
-    #     return "{} {}".format(self.course, self.program)
-
-    class Meta:
-        unique_together = ['course', 'program', 'year_of_study']
-
-
-# class Lecturer(models.Model):
-#     user = models.OneToOneField(
-#         "User", verbose_name=("user"), on_delete=models.CASCADE)
-#     role = models.ForeignKey(
-#         'Role', related_name='lecturer', on_delete=models.SET('empty'))
-
-#     class Meta:
-#         verbose_name = ("lecturer")
-#         verbose_name_plural = ("lecturers")
-
-#     def __str__(self):
-#         return self.user.last_name
-
-#     def get_absolute_url(self):
-#         return reverse("lecturer_detail", kwargs={"pk": self.pk})
-
-
-class Lecture_Course(models.Model):
-    MY_CHOICES = (
+    ACADEMIC_YEAR = (
         ('a', '2020/2021'),
         ('b', '2021/2022'),
         ('c', '2022/2023'),
         ('d', '2023/2024'),
+        ('e', '2024/2025'),
+        ('f', '2025/2026'),
+    )
+
+    COURSE_TYPE = (
+        ('core', 'Core'), ('optional', 'Optional')
+    )
+
+    YEARS_OF_STUDY = (
+        ('1', '1'), ('2', '2'), ('3', '3'), ('4', '4'), ('5', '5')
+    )
+
+    course = models.ForeignKey(
+        'Course', on_delete=models.CASCADE)
+    program = models.ForeignKey(
+        'Program', on_delete=models.CASCADE)
+    semester = models.IntegerField(validators=[
+        MaxValueValidator(2),
+        MinValueValidator(1),
+    ], default=1)
+    course_type = models.CharField(max_length=10, choices=COURSE_TYPE, default='core', null=True)
+    year_of_study = models.CharField(max_length=1, choices=YEARS_OF_STUDY, default='1')
+    academic_year = models.CharField(max_length=9, choices=ACADEMIC_YEAR, default='a')
+
+    class Meta:
+        unique_together = ['course', 'program', 'academic_year', 'semester', 'course_type', 'year_of_study']
+
+
+class Lecture_Course(models.Model):
+    ACADEMIC_YEAR = (
+        ('a', '2020/2021'),
+        ('b', '2021/2022'),
+        ('c', '2022/2023'),
+        ('d', '2023/2024'),
+        ('e', '2024/2025'),
+        ('f', '2025/2026'),
     )
 
     lecturer = models.ForeignKey(
@@ -129,25 +131,15 @@ class Lecture_Course(models.Model):
     course = models.ForeignKey(
         'Course', on_delete=models.CASCADE)
     assessmentCriteria = models.ForeignKey(
-        'Assessment_Criteria', on_delete=models.CASCADE, null=True)
+        'CA_Item', on_delete=models.CASCADE, null=True)
     ca_contribution = models.IntegerField(validators=[
         MaxValueValidator(40),
         MinValueValidator(0),
     ], default=20)
-    academic_year = models.CharField(max_length=9, choices=MY_CHOICES, default='a')
-
-    # def __str__(self):
-    #     return "{}    {}".format(self.lecturer.lecturer.username, self.course.course_code)
+    academic_year = models.CharField(max_length=9, choices=ACADEMIC_YEAR, default='a')
 
     class Meta:
         unique_together = ['lecturer', 'course', 'academic_year', 'assessmentCriteria']
-
-
-# class Role(models.Model):
-#     role = models.CharField(max_length=30, primary_key=True)
-
-#     def __str__(self):
-#         return self.role
 
 
 class Student(models.Model):
@@ -175,32 +167,19 @@ class Assessment(models.Model):
         ('b', '2021/2022'),
         ('c', '2022/2023'),
         ('d', '2023/2024'),
-    )
-
-    TIME = (
-        ('a', '7:00 am'),
-        ('b', '8:00 am'),
-        ('c', '9:00 am'),
-        ('d', '10:00 am'),
-        ('e', '11:00 am'),
-        ('f', '12:00 pm'),
-        ('g', '13:00 pm'),
-        ('h', '14:00 pm'),
-        ('i', '15:00 pm'),
-        ('j', '16:00 pm'),
-        ('k', '17:00 pm'),
-        ('l', '18:00 pm'),
+        ('e', '2024/2025'),
+        ('f', '2025/2026'),
     )
 
     criteria = models.ForeignKey(
-        'Assessment_Criteria', related_name='assessment', on_delete=models.CASCADE)
+        'CA_Item', related_name='assessment', on_delete=models.CASCADE)
     course = models.ForeignKey(
         'Course', related_name='assessment', on_delete=models.CASCADE)
     academic_year = models.CharField(max_length=9, choices=ACADEMIC_YEAR, default='a')
-    time = models.CharField(max_length=8, choices=TIME, default='a')
+    # time = models.CharField(max_length=8, choices=TIME, default='a')
     date_taken = models.DateField(verbose_name='Date', auto_now_add=False)
-    total_mark = models.IntegerField(default=20, verbose_name='Total marks',
-                                     validators=[MaxValueValidator(100), MinValueValidator(0)])
+    # total_mark = models.IntegerField(default=20, verbose_name='Total marks',
+    #                                  validators=[MaxValueValidator(100), MinValueValidator(0)])
     number_of_questions = models.IntegerField(
         validators=[MinValueValidator(1)], default=4)
     contribution = models.IntegerField(default=20, verbose_name='Contribution to CA in Percentage',
@@ -210,8 +189,7 @@ class Assessment(models.Model):
         return "{} {}".format(self.course, self.criteria)
 
     class Meta:
-        unique_together = ['course', 'contribution', 'criteria', 'academic_year', 'date_taken', 'number_of_questions',
-                           'time', 'total_mark']
+        unique_together = ['course', 'contribution', 'criteria', 'academic_year', 'date_taken', 'number_of_questions']
 
 
 class Assessment_Results(models.Model):
@@ -219,15 +197,13 @@ class Assessment_Results(models.Model):
         'Assessment', related_name='result', on_delete=models.CASCADE)
     student = models.ForeignKey(
         'Student', related_name='assessment_result', on_delete=models.CASCADE)
-    question_number = models.IntegerField(default=1, validators=[MaxValueValidator(4), MinValueValidator(0)])
-    total_score = models.IntegerField(validators=[MaxValueValidator(100), MinValueValidator(0)])
     score = models.IntegerField(validators=[MaxValueValidator(100), MinValueValidator(0)])
 
     def __str__(self):
         return "{} {}".format(self.student, self.assessment)
 
     class Meta:
-        unique_together = ['assessment', 'student', 'question_number', 'total_score', 'score']
+        unique_together = ['assessment', 'student', 'score']
 
 
 class UE(models.Model):
@@ -296,6 +272,11 @@ class Result(models.Model):
         MinValueValidator(0),
     ])
 
+    @property
+    def sum(self):
+        sum = self.first_question + self.second_question + self.third_question + self.fourth_question
+        return sum
+
     def __str__(self):
         return self.name
 
@@ -304,7 +285,7 @@ class LecturerCriteria(models.Model):
     lecturer = models.ForeignKey(
         'Lecturer', related_name='lecturer_criteria', on_delete=models.CASCADE)
     assessmentCriteria = models.ForeignKey(
-        'Assessment_Criteria', related_name='criteria', on_delete=models.CASCADE)
+        'CA_Item', related_name='criteria', on_delete=models.CASCADE)
     ca_contribution = models.IntegerField(validators=[
         MaxValueValidator(40),
         MinValueValidator(0),

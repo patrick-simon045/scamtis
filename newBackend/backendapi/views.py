@@ -6,8 +6,8 @@ from rest_framework import status, viewsets, generics
 from rest_framework.authtoken.models import Token
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .models import Result, Assessment_Criteria
-from .serializers import ResultSerializer, AssessmentCriteriaSerializer, LecturerCourseSerializer
+from .models import Result, CA_Item
+from .serializers import ResultSerializer, CA_ItemSerializer, LecturerCourseSerializer
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework import authentication
@@ -40,9 +40,9 @@ class ResultsViewset(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
 
 
-class AssessmentCriteriaViewset(viewsets.ReadOnlyModelViewSet):
-    queryset = Assessment_Criteria.objects.all()
-    serializer_class = AssessmentCriteriaSerializer
+class CA_ItemsViewset(viewsets.ReadOnlyModelViewSet):
+    queryset = CA_Item.objects.all()
+    serializer_class = CA_ItemSerializer
     permission_classes = [IsAuthenticated]
 
 
