@@ -109,35 +109,11 @@ class Program_Course(models.Model):
         MinValueValidator(1),
     ], default=1)
     course_type = models.CharField(max_length=10, choices=COURSE_TYPE, default='core', null=True)
-    # year_of_study = models.IntegerField(validators=[
-    #     MaxValueValidator(4),
-    #     MinValueValidator(1),
-    # ], default=1)
     year_of_study = models.CharField(max_length=1, choices=YEARS_OF_STUDY, default='1')
     academic_year = models.CharField(max_length=9, choices=ACADEMIC_YEAR, default='a')
 
-    # def __str__(self):
-    #     return "{} {}".format(self.course, self.program)
-
     class Meta:
         unique_together = ['course', 'program', 'academic_year', 'semester', 'course_type', 'year_of_study']
-
-
-# class Lecturer(models.Model):
-#     user = models.OneToOneField(
-#         "User", verbose_name=("user"), on_delete=models.CASCADE)
-#     role = models.ForeignKey(
-#         'Role', related_name='lecturer', on_delete=models.SET('empty'))
-
-#     class Meta:
-#         verbose_name = ("lecturer")
-#         verbose_name_plural = ("lecturers")
-
-#     def __str__(self):
-#         return self.user.last_name
-
-#     def get_absolute_url(self):
-#         return reverse("lecturer_detail", kwargs={"pk": self.pk})
 
 
 class Lecture_Course(models.Model):
@@ -162,18 +138,8 @@ class Lecture_Course(models.Model):
     ], default=20)
     academic_year = models.CharField(max_length=9, choices=ACADEMIC_YEAR, default='a')
 
-    # def __str__(self):
-    #     return "{}    {}".format(self.lecturer.lecturer.username, self.course.course_code)
-
     class Meta:
         unique_together = ['lecturer', 'course', 'academic_year', 'assessmentCriteria']
-
-
-# class Role(models.Model):
-#     role = models.CharField(max_length=30, primary_key=True)
-
-#     def __str__(self):
-#         return self.role
 
 
 class Student(models.Model):
@@ -231,8 +197,6 @@ class Assessment_Results(models.Model):
         'Assessment', related_name='result', on_delete=models.CASCADE)
     student = models.ForeignKey(
         'Student', related_name='assessment_result', on_delete=models.CASCADE)
-    # question_number = models.IntegerField(default=1, validators=[MaxValueValidator(4), MinValueValidator(0)])
-    # total_score = models.IntegerField(validators=[MaxValueValidator(100), MinValueValidator(0)])
     score = models.IntegerField(validators=[MaxValueValidator(100), MinValueValidator(0)])
 
     def __str__(self):
@@ -314,13 +278,6 @@ class Result(models.Model):
     def sum(self):
         sum = self.first_question + self.second_question + self.third_question + self.fourth_question
         return sum
-
-    # sum = property(_sum)
-    # def save(self, force_insert=False, force_update=False, using=None,
-    #          update_fields=None):
-    # def save(self, *args, **kwargs):
-    #     self.sum = self._sum()
-    #     super(Result, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.name
