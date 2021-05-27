@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="07702d9d-9826-4868-8604-7487e975a5c3" name="Default Changelist" comment="models modification">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backendapi/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/backendapi/admin.py" afterDir="false" />
+    <list default="true" id="07702d9d-9826-4868-8604-7487e975a5c3" name="Default Changelist" comment="success implementing model field value from other fields in the same world">
       <change beforePath="$PROJECT_DIR$/backendapi/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/backendapi/models.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -61,7 +59,14 @@
       <option name="project" value="LOCAL" />
       <updated>1622028647287</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="success implementing model field value from other fields in the same world">
+      <created>1622112707157</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1622112707157</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -78,6 +83,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="models modification" />
-    <option name="LAST_COMMIT_MESSAGE" value="models modification" />
+    <MESSAGE value="success implementing model field value from other fields in the same world" />
+    <option name="LAST_COMMIT_MESSAGE" value="success implementing model field value from other fields in the same world" />
   </component>
 </project>

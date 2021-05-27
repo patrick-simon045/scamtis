@@ -272,7 +272,7 @@ class Result(models.Model):
         MinValueValidator(0),
     ])
 
-    sum = models.PositiveSmallIntegerField(null=True)
+    sum = models.PositiveSmallIntegerField()
 
     def save(self, *args, **kwargs):
         self.sum = self.first_question + self.second_question + self.third_question + self.fourth_question
