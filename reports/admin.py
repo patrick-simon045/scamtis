@@ -78,7 +78,7 @@ admin.site.register(UE, UEAdmin)
 
 class UE_ResultsAdmin(admin.ModelAdmin):
     pass
-    list_display = ('ue', 'question_number', 'score', 'total_score', 'student')
+    list_display = ('ue', 'question_number', 'score', 'student')
 
 
 admin.site.register(UE_Questions_Results, UE_ResultsAdmin)
@@ -122,3 +122,11 @@ class UE_Questions_ResultsAdmin(admin.ModelAdmin):
 @admin.register(CA_Results)
 class CA_ResultsAdmin(admin.ModelAdmin):
     pass
+
+
+class CAAdmin(admin.ModelAdmin):
+    # list_display = ('',)
+    pass
+
+
+admin.site.register(CA, CAAdmin)

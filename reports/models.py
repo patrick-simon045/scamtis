@@ -54,9 +54,6 @@ class Program_Course(models.Model):
         verbose_name = ("course in program")
         verbose_name_plural = ("courses in certain program")
 
-    class Meta:
-        unique_together = ['course', 'program', 'year_of_study']
-
 
 class Lecturer(models.Model):
     user = models.OneToOneField(
@@ -89,9 +86,6 @@ class Lecture_Course(models.Model):
         unique_together = ['lecturer', 'course', 'academic_year']
         verbose_name = ("course and lecture")
         verbose_name_plural = ("courses and lectures")
-
-    class Meta:
-        unique_together = ['lecturer', 'course', 'academic_year']
 
 
 class Role(models.Model):
@@ -128,8 +122,8 @@ class CA_Item(models.Model):
         return self.criteria_name
 
     class Meta:
-        verbose_name = ("assessment criteria")
-        verbose_name_plural = ("assessment criterias")
+        verbose_name = ("CA Item")
+        verbose_name_plural = ("CA Items")
 
 
 class Assessment_Criteria(models.Model):
@@ -169,12 +163,8 @@ class Assessment_Questions_Results(models.Model):
     class Meta:
         unique_together = ['score', 'total_score',
                            'question_number', 'student', 'assessment']
-        verbose_name = ("assessment result")
-        verbose_name_plural = ("assessment results")
-
-    class Meta:
-        unique_together = ['score', 'total_score',
-                           'question_number', 'student', 'assessment']
+        verbose_name = ("assessment question result")
+        verbose_name_plural = ("assessment questions results")
 
 
 class UE(models.Model):
@@ -229,7 +219,7 @@ class Course_Venue(models.Model):
 
 class UE_Questions_Results(models.Model):
     score = models.IntegerField(validators=[MaxValueValidator(100)])
-    total_score = models.IntegerField(validators=[MaxValueValidator(100)])
+    # total_score = models.IntegerField(validators=[MaxValueValidator(100)])
     question_number = models.IntegerField(validators=[MinValueValidator(1)])
     student = models.ForeignKey(
         'Student', related_name='result', on_delete=models.CASCADE)
@@ -240,8 +230,7 @@ class UE_Questions_Results(models.Model):
         return 'ue results'
 
     class Meta:
-        unique_together = ['score', 'total_score',
-                           'question_number', 'student', 'ue']
+        unique_together = ['score', 'question_number', 'student', 'ue']
         verbose_name = ("University Exam Questions Result")
         verbose_name_plural = ("University Exam Questions Results")
 
@@ -249,15 +238,12 @@ class UE_Questions_Results(models.Model):
 class CA_Results(models.Model):
     student = models.ForeignKey('Student', on_delete=models.CASCADE)
     course = models.ForeignKey('Course', on_delete=models.CASCADE)
-    ca_item_1 = models.CharField(max_length=20)
-    ca_item_2 = models.CharField(max_length=20)
-    ca_item_3 = models.CharField(max_length=20)
-    ca_item_4 = models.CharField(max_length=20)
-    ca_item_5 = models.CharField(max_length=20)
-    avarage_score = models.IntegerField()
+    ca_item = models.ForeignKey(
+        'CA_Item', on_delete=models.CASCADE)
+    score = models.IntegerField()
 
     class Meta:
-        unique_together = ['course', 'student']
+        unique_together = ['course', 'student', 'ca_item']
         verbose_name = ("Continous Assessment Result")
         verbose_name_plural = ("Continous Assessment Results")
 
@@ -277,4 +263,13 @@ class UE_Results(models.Model):
 
     def __str__(self):
         return f'{self.student} {self.avarage_score}'
+
+
+class CA(models.Model):
+    student = models.ForeignKey('Student', on_delete=models.CASCADE)
+    course = models.ForeignKey('Course', on_delete=models.CASCADE)
+    ca = models.IntegerField()
+
+    def __str__(self):
+        return f'{self.student} {self.ca}'
 #  todo adding questions marks reference
