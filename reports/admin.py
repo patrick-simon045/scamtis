@@ -38,7 +38,7 @@ admin.site.register(Role, RoleAdmin)
 
 class StudentAdmin(admin.ModelAdmin):
     pass
-    # list_display = ('',)
+    list_display = ('regno', 'program')
 
 
 admin.site.register(Student, StudentAdmin)
@@ -49,7 +49,7 @@ class Assessment_CriteriaAdmin(admin.ModelAdmin):
     # list_display = ('',)
 
 
-admin.site.register(Assessment_Criteria, Assessment_CriteriaAdmin)
+admin.site.register(CA_Item, Assessment_CriteriaAdmin)
 
 
 class AssessmentAdmin(admin.ModelAdmin):
@@ -57,7 +57,7 @@ class AssessmentAdmin(admin.ModelAdmin):
     # list_display = ('',)
 
 
-admin.site.register(Assessment, AssessmentAdmin)
+admin.site.register(Assessment_Criteria, AssessmentAdmin)
 
 
 class Assessment_ResultsAdmin(admin.ModelAdmin):
@@ -65,7 +65,7 @@ class Assessment_ResultsAdmin(admin.ModelAdmin):
     # list_display = ('',)
 
 
-admin.site.register(Assessment_Results, Assessment_ResultsAdmin)
+admin.site.register(Assessment_Questions_Results, Assessment_ResultsAdmin)
 
 
 class UEAdmin(admin.ModelAdmin):
@@ -78,10 +78,10 @@ admin.site.register(UE, UEAdmin)
 
 class UE_ResultsAdmin(admin.ModelAdmin):
     pass
-    # list_display = ('',)
+    list_display = ('ue', 'question_number', 'score', 'total_score', 'student')
 
 
-admin.site.register(UE_Results, UE_ResultsAdmin)
+admin.site.register(UE_Questions_Results, UE_ResultsAdmin)
 
 
 @admin.register(Lecture_Course)
@@ -107,3 +107,18 @@ class UserAdmin(BaseUserAdmin):
 
 
 admin.site.register(User, UserAdmin)
+
+
+@admin.register(Venue)
+class VenuAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(UE_Results)
+class UE_Questions_ResultsAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(CA_Results)
+class CA_ResultsAdmin(admin.ModelAdmin):
+    pass
