@@ -23,6 +23,7 @@ admin.site.register(Role)
 class ResultAdmin(admin.ModelAdmin):
     list_display = ('name', 'first_question', 'second_question', 'third_question', 'fourth_question', 'sum')
     list_filter = ('name', 'first_question')
+    readonly_fields = ['sum']
 
 
 admin.site.register(Result, ResultAdmin)

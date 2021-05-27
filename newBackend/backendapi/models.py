@@ -253,29 +253,30 @@ class UE_Results(models.Model):
 
 class Result(models.Model):
     name = models.CharField(default='question', max_length=10)
-    first_question = models.IntegerField(validators=[
+    first_question = models.PositiveSmallIntegerField(validators=[
         MaxValueValidator(10),
         MinValueValidator(0),
     ])
-    second_question = models.IntegerField(validators=[
+    second_question = models.PositiveSmallIntegerField(validators=[
         MaxValueValidator(10),
         MinValueValidator(0),
     ])
-    third_question = models.IntegerField(
+    third_question = models.PositiveSmallIntegerField(
         validators=[
             MaxValueValidator(10),
             MinValueValidator(0),
         ]
     )
-    fourth_question = models.IntegerField(validators=[
+    fourth_question = models.PositiveSmallIntegerField(validators=[
         MaxValueValidator(10),
         MinValueValidator(0),
     ])
 
-    @property
-    def sum(self):
-        sum = self.first_question + self.second_question + self.third_question + self.fourth_question
-        return sum
+    sum = models.PositiveSmallIntegerField(null=True)
+
+    def save(self, *args, **kwargs):
+        self.sum = self.first_question + self.second_question + self.third_question + self.fourth_question
+        super(Result, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.name
