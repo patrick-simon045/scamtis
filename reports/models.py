@@ -34,6 +34,12 @@ class Course(models.Model):
 
 
 class Program_Course(models.Model):
+    class Semester(models.IntegerChoices):
+        semester_one = 1
+        semester_two = 2
+    semester = models.IntegerField(choices=Semester.choices)
+    academic_year = models.CharField(max_length=5)
+    mandatory = models.BooleanField()
     course = models.ForeignKey(
         'Course', on_delete=models.CASCADE)
     program = models.ForeignKey(
@@ -115,7 +121,7 @@ class Student(models.Model):
         return reverse("student_detail", kwargs={"pk": self.pk})
 
 
-class Assessment_Criteria(models.Model):
+class CA_Item(models.Model):
     criteria_name = models.CharField(max_length=20, primary_key=True)
 
     def __str__(self):
@@ -126,9 +132,9 @@ class Assessment_Criteria(models.Model):
         verbose_name_plural = ("assessment criterias")
 
 
-class Assessment(models.Model):
+class Assessment_Criteria(models.Model):
     criteria = models.ForeignKey(
-        'Assessment_Criteria', related_name='assessment', on_delete=models.CASCADE)
+        'CA_Item', related_name='assessment', on_delete=models.CASCADE)
     course = models.ForeignKey(
         'Course', related_name='assessment', on_delete=models.CASCADE)
     academic_year = models.CharField(max_length=5)
@@ -148,14 +154,14 @@ class Assessment(models.Model):
                            'criteria', 'academic_year', 'date_taken', 'total_mark', 'number_of_questions']
 
 
-class Assessment_Results(models.Model):
+class Assessment_Questions_Results(models.Model):
     score = models.IntegerField(validators=[MaxValueValidator(100)])
     total_score = models.IntegerField(validators=[MaxValueValidator(100)])
     question_number = models.IntegerField(validators=[MinValueValidator(1)])
     student = models.ForeignKey(
         'Student', related_name='assessment_result', on_delete=models.CASCADE)
     assessment = models.ForeignKey(
-        'Assessment', related_name='result', on_delete=models.CASCADE)
+        'Assessment_Criteria', related_name='result', on_delete=models.CASCADE)
 
     def __str__(self):
         return f'assessment result'
@@ -172,31 +178,56 @@ class Assessment_Results(models.Model):
 
 
 class UE(models.Model):
-    exam_type = models.CharField(max_length=30)
+    venue = models.ManyToManyField('Venue', through='Course_Venue')
+    # assuming total mark = 100
+    exam_type_choices = (('sup', 'suplimentary'),
+                         ('special', 'special'), ('UE', 'UE'),)
+    exam_type = models.CharField(choices=exam_type_choices, max_length=30)
     course = models.ForeignKey(
         'Course', related_name='ue', on_delete=models.CASCADE)
     academic_year = models.CharField(max_length=5)
     date_taken = models.DateTimeField(verbose_name='Date', auto_now_add=True)
-    total_mark = models.IntegerField(verbose_name='Total marks',
-                                     validators=[MaxValueValidator(100), MinValueValidator(0)])
+    # total_mark = models.IntegerField(verbose_name='Total marks',
+    #                                  validators=[MaxValueValidator(100), MinValueValidator(0)])
     number_of_questions = models.IntegerField(
         validators=[MinValueValidator(1)])
 
     def __str__(self):
-        return f'{self.criteria} {self.academic_year}'
+        return f'{self.exam_type} {self.academic_year}'
 
     class Meta:
         unique_together = ['course', 'exam_type', 'academic_year',
-                           'date_taken', 'total_mark', 'number_of_questions']
+                           'date_taken', 'number_of_questions']
         verbose_name = ("University Exam")
         verbose_name_plural = ("University Exams")
 
+
+class Venue(models.Model):
+    venue_name = models.CharField(max_length=30, primary_key=True)
+
+    def __str__(self):
+        return self.venue_name
+
+
+class Course_Venue(models.Model):
+    paper = models.ForeignKey('UE',  on_delete=models.CASCADE)
+    venue = models.ForeignKey('Venue', on_delete=models.CASCADE)
+    head_supervisor = models.ForeignKey('Lecturer',  on_delete=models.CASCADE)
+    da_te = models.DateTimeField()
+
     class Meta:
-        unique_together = ['course', 'exam_type', 'academic_year',
-                           'date_taken', 'total_mark', 'number_of_questions']
+        unique_together = ['paper', 'venue']
+        verbose_name = ("Course Venue")
+        verbose_name_plural = ("Course Venue")
+
+    def __str__(self):
+        return
+
+    def __unicode__(self):
+        return
 
 
-class UE_Results(models.Model):
+class UE_Questions_Results(models.Model):
     score = models.IntegerField(validators=[MaxValueValidator(100)])
     total_score = models.IntegerField(validators=[MaxValueValidator(100)])
     question_number = models.IntegerField(validators=[MinValueValidator(1)])
@@ -211,5 +242,39 @@ class UE_Results(models.Model):
     class Meta:
         unique_together = ['score', 'total_score',
                            'question_number', 'student', 'ue']
+        verbose_name = ("University Exam Questions Result")
+        verbose_name_plural = ("University Exam Questions Results")
+
+
+class CA_Results(models.Model):
+    student = models.ForeignKey('Student', on_delete=models.CASCADE)
+    course = models.ForeignKey('Course', on_delete=models.CASCADE)
+    ca_item_1 = models.CharField(max_length=20)
+    ca_item_2 = models.CharField(max_length=20)
+    ca_item_3 = models.CharField(max_length=20)
+    ca_item_4 = models.CharField(max_length=20)
+    ca_item_5 = models.CharField(max_length=20)
+    avarage_score = models.IntegerField()
+
+    class Meta:
+        unique_together = ['course', 'student']
+        verbose_name = ("Continous Assessment Result")
+        verbose_name_plural = ("Continous Assessment Results")
+
+    def __str__(self):
+        return f'{self.student} {self.avarage_score}'
+
+
+class UE_Results(models.Model):
+    student = models.ForeignKey('Student', on_delete=models.CASCADE)
+    course = models.ForeignKey('Course', on_delete=models.CASCADE)
+    avarage_score = models.IntegerField()
+
+    class Meta:
+        unique_together = ['course', 'student']
         verbose_name = ("University Exam Result")
         verbose_name_plural = ("University Exam Results")
+
+    def __str__(self):
+        return f'{self.student} {self.avarage_score}'
+#  todo adding questions marks reference
