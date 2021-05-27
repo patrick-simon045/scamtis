@@ -149,7 +149,6 @@ const Results = () => {
               result(cell.id, newData, res.index);
             }}
           />
-          ;
         </React.StrictMode>
       </div>
     </div>
