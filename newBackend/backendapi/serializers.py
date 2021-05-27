@@ -5,7 +5,7 @@ from .models import Result, CA_Item, Lecture_Course
 class ResultSerializer(serializers.ModelSerializer):
     class Meta:
         model = Result
-        fields = ['id', 'name', 'first_question', 'second_question', 'third_question', 'fourth_question']
+        fields = ['id', 'first_question', 'second_question', 'third_question', 'fourth_question']
 
 
 class CA_ItemSerializer(serializers.ModelSerializer):
