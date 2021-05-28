@@ -1,37 +1,19 @@
 import xlwt
 from django.contrib.auth.models import User
+from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
 from rest_framework import status, viewsets, generics
 from rest_framework.authtoken.models import Token
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .models import Result, CA_Item
 from .serializers import ResultSerializer, CA_ItemSerializer, LecturerCourseSerializer
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework import authentication
-
-
-# def show_average(request): results = Result.objects.all().values_list('first_question', 'second_question',
-# 'third_question', 'fourth_question')
-#
-#     student_scores = []
-#
-#     # for scores in results:
-#     #     result = [
-#     #         results[scores].first_question,
-#     #         results[scores].second_question,
-#     #         results[scores].third_question,
-#     #         results[scores].fourth_question,
-#     #     ]
-#     #     student_scores.append(result)
-#
-#     # for a in range(len(results)):
-#     #     print(list(results[a]))
-#
-#     print(results)
-#     return Response('len(results)')
+from rest_framework.authtoken.models import Token
+from .models import *
 
 
 class ResultsViewset(viewsets.ModelViewSet):
@@ -46,45 +28,89 @@ class CA_ItemsViewset(viewsets.ReadOnlyModelViewSet):
     permission_classes = [IsAuthenticated]
 
 
-class UserDetails(generics.ListCreateAPIView):
-    queryset = User.objects.all()
-    serializer_class = LecturerCourseSerializer
-    permission_classes = [IsAuthenticated]
+#
+#
+# lecturer details api
+#
+#
 
-    def list(self, request):
-        # Note the use of `get_queryset()` instead of `self.queryset`
-        print(request.data)
-        queryset = self.get_queryset()
-        serializer = LecturerCourseSerializer(queryset, many=True)
-        return Response(serializer.data)
-
-
-def get_lecture_course_details(token):
-    user_email = Token.objects.get(key=token).user.email
-    user_first_name = Token.objects.get(key=token).user.first_name
-    user_last_name = Token.objects.get(key=token).user.last_name
-    user = {"user_email": user_email, "user_first_name": user_first_name, "user_last_name": user_last_name}
+def get_user_from_token(token):
+    user = Token.objects.get(pk=token).user
+    print("username: {}".format(user))
     return user
 
 
-# # @api_view(['GET', 'POST'])
-# @csrf_exempt
-# def show_results(request):
-#     if request.method == 'GET':
-#         results = Result.objects.all()
-#         serializer = ResultSerializer(results, many=True)
-#         return JsonResponse(serializer.data, safe=False)
+def get_lecturer_from_user(user):
+    lecturer = Lecturer.objects.get(lecturer=user)
+    print("lecturer role: {}".format(lecturer.role))
+    return lecturer
+
+
+def get_lecturer_name(lecturer):
+    lecturer_first_name = lecturer.lecturer.first_name
+    lecturer_last_name = lecturer.lecturer.last_name
+    print("lecturer name: {} {}".format(lecturer_first_name, lecturer_last_name))
+    return "{} {}".format(lecturer_first_name, lecturer_last_name)
+
+
+def get_courses_assigned_to_a_lecturer(lecturer):
+    lecturer_course = Lecture_Course.objects.filter(lecturer=lecturer)
+    print(lecturer_course)
+    courses = get_list_of_courses_for_a_lecturer(lecturer_course)
+    print("number of courses assigned to {}: {}".format(get_lecturer_name(lecturer), len(courses)))
+    print(courses)
+    return courses
+
+
+def get_list_of_courses_for_a_lecturer(list_of_lecturer_course_instance):
+    courses = []
+    for lecturer_course_instance in list_of_lecturer_course_instance:
+        courses.append(
+            {
+                "course_code": lecturer_course_instance.course.course_code,
+                "course_description": lecturer_course_instance.course.course_name
+            }
+        )
+    return courses
+
+
+@api_view()
+@permission_classes([IsAuthenticated])
+def lecturer_details(request):
+    usernames = [user.username for user in User.objects.all()]
+    print("token from request header: {}".format(request.META.get('HTTP_AUTHORIZATION')))
+    authorization_token = request.META.get('HTTP_AUTHORIZATION')
+    token = authorization_token[6:]
+
+    user = get_user_from_token(token)
+
+    try:
+        lecturer = get_lecturer_from_user(user)
+        lecturer_name = get_lecturer_name(lecturer)
+        courses = get_courses_assigned_to_a_lecturer(lecturer)
+
+        return Response({
+            "user_name": lecturer.lecturer.username,
+            "lecturer_name": lecturer_name,
+            "courses_teaching": courses,
+            "course_count": len(courses),
+            "position": lecturer.role.role_name,
+        })
+    except ObjectDoesNotExist as error:
+        print("no lecturer with such credentials")
+        print("error message: {}".format(error))
+
+    print("usernames: {}".format(usernames))
+
+    return Response("Nothing to show")
+
+
 #
 #
-# @csrf_exempt
-# @api_view(['POST'])
-# def create_results(request):
-#     if request.method == 'POST':
-#         serializer = ResultSerializer(data=request.data)
-#         if serializer.is_valid():
-#             serializer.save()
-#             return Response(serializer.data, status=status.HTTP_201_CREATED)
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+# end lecturer api
+#
+#
+
 
 def export_users_xls(request):
     response = HttpResponse(content_type='application/ms-excel')

@@ -11,10 +11,10 @@ class ResultSerializer(serializers.ModelSerializer):
 class CA_ItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = CA_Item
-        fields = ['criteria_name']
+        fields = ['ca_item_name']
 
 
 class LecturerCourseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Lecture_Course
-        fields = ['lecturer', 'course', 'academic_year', 'assessmentCriteria']
+        fields = ['lecturer', 'course', 'academic_year']

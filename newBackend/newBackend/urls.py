@@ -8,6 +8,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', admin.site.urls),
     # path('', views.export_users_xls, name='export_excel'),
-    path('api/', include(urls.router.urls)),
+    path('api/', include(urls)),
     path('token_auth/', obtain_auth_token, name='token_auth'),
 ]

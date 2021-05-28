@@ -2,11 +2,11 @@ from django.contrib import admin
 from .models import *
 
 
-class LecturerCriteriaAdmin(admin.ModelAdmin):
-    list_display = ('lecturer', 'assessmentCriteria', 'ca_contribution')
-
-
-admin.site.register(LecturerCriteria, LecturerCriteriaAdmin)
+# class LecturerCriteriaAdmin(admin.ModelAdmin):
+#     list_display = ('lecturer', 'assessmentCriteria', 'ca_contribution')
+#
+#
+# admin.site.register(LecturerCriteria, LecturerCriteriaAdmin)
 
 
 # admin.site.register(Lecturer)
@@ -29,7 +29,14 @@ class ResultAdmin(admin.ModelAdmin):
 admin.site.register(Result, ResultAdmin)
 
 admin.site.register(Program)
-admin.site.register(Course)
+
+
+# admin.site.register(Course)
+class CourseAdmin(admin.ModelAdmin):
+    list_display = ('course_code', 'course_name')
+
+
+admin.site.register(Course, CourseAdmin)
 
 
 # admin.site.register(Program_Course)
@@ -44,7 +51,7 @@ admin.site.register(Program_Course, Program_CourseAdmin)
 # admin.site.register(Lecture_Course)
 
 class Lecture_CourseAdmin(admin.ModelAdmin):
-    list_display = ('lecturer', 'course', 'assessmentCriteria', 'academic_year')
+    list_display = ('lecturer', 'course', 'academic_year')
 
 
 admin.site.register(Lecture_Course, Lecture_CourseAdmin)
@@ -63,7 +70,7 @@ admin.site.register(CA_Item)
 # admin.site.register(Assessment)
 class AssessmentAdmin(admin.ModelAdmin):
     list_display = (
-        'course', 'criteria', 'number_of_questions', 'contribution', 'date_taken')
+        'course', 'criteria', 'contribution', 'academic_year', 'number_of_questions', 'date_taken')
     list_filter = ('criteria', 'academic_year')
 
 
@@ -79,3 +86,11 @@ admin.site.register(Assessment_Results, Assessment_ResultsAdmin)
 
 admin.site.register(UE)
 admin.site.register(UE_Results)
+
+
+class CAAdmin(admin.ModelAdmin):
+    list_display = ('student', 'course', 'ca', 'academic_year')
+    list_filter = ('course', 'academic_year')
+
+
+admin.site.register(CA, CAAdmin)

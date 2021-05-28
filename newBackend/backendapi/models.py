@@ -44,7 +44,8 @@ class Lecturer(models.Model):
     # role_name = models.CharField(max_length=20, null=False, default='Lecturer')
     role = models.ForeignKey(Role, on_delete=models.PROTECT, null=True)
     course = models.ManyToManyField(Course, through='Lecture_Course')
-    criteria = models.ManyToManyField(CA_Item, through='LecturerCriteria')
+
+    # criteria = models.ManyToManyField(CA_Item, through='LecturerCriteria')
 
     def __str__(self):
         return str(self.lecturer)
@@ -130,16 +131,19 @@ class Lecture_Course(models.Model):
         'Lecturer', on_delete=models.CASCADE)
     course = models.ForeignKey(
         'Course', on_delete=models.CASCADE)
-    assessmentCriteria = models.ForeignKey(
-        'CA_Item', on_delete=models.CASCADE, null=True)
-    ca_contribution = models.IntegerField(validators=[
-        MaxValueValidator(40),
-        MinValueValidator(0),
-    ], default=20)
+    # assessmentCriteria = models.ForeignKey(
+    #     'CA_Item', on_delete=models.CASCADE, null=True)
+    # ca_contribution = models.IntegerField(validators=[
+    #     MaxValueValidator(40),
+    #     MinValueValidator(0),
+    # ], default=20)
     academic_year = models.CharField(max_length=9, choices=ACADEMIC_YEAR, default='a')
 
+    def __str__(self):
+        return '{} {}'.format(self.lecturer, self.course)
+
     class Meta:
-        unique_together = ['lecturer', 'course', 'academic_year', 'assessmentCriteria']
+        unique_together = ['lecturer', 'course', 'academic_year']
 
 
 class Student(models.Model):
@@ -189,18 +193,56 @@ class Assessment(models.Model):
         return "{} {}".format(self.course, self.criteria)
 
     class Meta:
-        unique_together = ['course', 'contribution', 'criteria', 'academic_year', 'date_taken', 'number_of_questions']
+        unique_together = ['course', 'criteria']
 
 
 class Assessment_Results(models.Model):
+    # ACADEMIC_YEAR = (
+    #     ('a', '2020/2021'),
+    #     ('b', '2021/2022'),
+    #     ('c', '2022/2023'),
+    #     ('d', '2023/2024'),
+    #     ('e', '2024/2025'),
+    #     ('f', '2025/2026'),
+    # )
+
     assessment = models.ForeignKey(
         'Assessment', related_name='result', on_delete=models.CASCADE)
     student = models.ForeignKey(
         'Student', related_name='assessment_result', on_delete=models.CASCADE)
     score = models.IntegerField(validators=[MaxValueValidator(100), MinValueValidator(0)])
 
+    # academic_year = models.CharField(max_length=9, choices=ACADEMIC_YEAR, default='a')
+
     def __str__(self):
         return "{} {}".format(self.student, self.assessment)
+
+    # def save(self, *args, **kwargs):
+    #     created = not self.pk
+    #     if created:
+    #         CA.objects.update_or_create(student=self.student, course=self.assessment.course,
+    #                                     academic_year=self.assessment.academic_year)
+    #     super().save(*args, **kwargs)
+
+        # def save(self, *args, **kwargs):
+        #     try:
+        #         voucher_type = VoucherTypeMaster.objects.get(
+        #             company=self.company,
+        #             code=self.type.code
+        #         )
+        #         if self.id is None:
+        #             voucher_type.last_number = voucher_type.last_number + 1
+        #             self.type = voucher_type
+        #             voucher_type.save()
+        #     except Exception, e:
+        #         print
+        #         e
+        #     super(Voucher, self).save(*args, **kwargs)
+
+        # student = models.ForeignKey('Student', on_delete=models.CASCADE)
+        # course = models.ForeignKey('Course', on_delete=models.CASCADE)
+        # ca = models.IntegerField(null=True)
+        # academic_year = models.CharField(max_length=9, choices=ACADEMIC_YEAR, default='a')
 
     class Meta:
         unique_together = ['assessment', 'student', 'score']
@@ -272,7 +314,7 @@ class Result(models.Model):
         MinValueValidator(0),
     ])
 
-    sum = models.PositiveSmallIntegerField()
+    sum = models.PositiveSmallIntegerField(null=True)
 
     def save(self, *args, **kwargs):
         self.sum = self.first_question + self.second_question + self.third_question + self.fourth_question
@@ -282,15 +324,43 @@ class Result(models.Model):
         return self.name
 
 
-class LecturerCriteria(models.Model):
-    lecturer = models.ForeignKey(
-        'Lecturer', related_name='lecturer_criteria', on_delete=models.CASCADE)
-    assessmentCriteria = models.ForeignKey(
-        'CA_Item', related_name='criteria', on_delete=models.CASCADE)
-    ca_contribution = models.IntegerField(validators=[
-        MaxValueValidator(40),
-        MinValueValidator(0),
-    ], default=20)
+# class LecturerCriteria(models.Model):
+#     lecturer = models.ForeignKey(
+#         'Lecturer', related_name='lecturer_criteria', on_delete=models.CASCADE)
+#     assessmentCriteria = models.ForeignKey(
+#         'CA_Item', related_name='criteria', on_delete=models.CASCADE)
+#     ca_contribution = models.IntegerField(validators=[
+#         MaxValueValidator(40),
+#         MinValueValidator(0),
+#     ], default=20)
+#
+#     class Meta:
+#         unique_together = ['lecturer', 'assessmentCriteria']
 
-    class Meta:
-        unique_together = ['lecturer', 'assessmentCriteria']
+
+class CA(models.Model):
+    ACADEMIC_YEAR = (
+        ('a', '2020/2021'),
+        ('b', '2021/2022'),
+        ('c', '2022/2023'),
+        ('d', '2023/2024'),
+        ('e', '2024/2025'),
+        ('f', '2025/2026'),
+    )
+
+    student = models.ForeignKey('Student', on_delete=models.CASCADE)
+    course = models.ForeignKey('Course', on_delete=models.CASCADE)
+    ca = models.IntegerField(null=True)
+    academic_year = models.CharField(max_length=9, choices=ACADEMIC_YEAR, default='a')
+
+    def __str__(self):
+        return f'{self.student} {self.ca}'
+
+# @receiver(post_save, sender=Assessment_Results)
+# def add_ca_record_for_a_student(sender, instance=None, created=False, **kwargs):
+#     if created:
+#         CA.objects.update_or_create(student=instance.student, course=instance.assessment.course,
+#                                     academic_year=instance.assessment.academic_year)
+#
+#         # lecturer = Lecturer(lecturer=instance)
+#         # lecturer.save()
