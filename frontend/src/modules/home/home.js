@@ -32,7 +32,7 @@ const { SubMenu } = Menu;
 
 class Home extends Component {
   state = {
-    collapsed: false,
+    collapsed: true,
   };
 
   onCollapse = (collapsed) => {

@@ -1,7 +1,51 @@
 import { Col, Row, Typography } from "antd";
 import React, { Component } from "react";
+import "../home.css";
 
 class Overview extends Component {
+  state = {
+    username: "Not fetched",
+    full_name: "Not fetched",
+    position: "Not fetched",
+    courses: ["Not fetched"],
+  };
+
+  componentDidMount() {
+    fetch("http://127.0.0.1:8000/api/lecturers/", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Token " + sessionStorage.getItem("token"),
+      },
+    })
+      .then((response) => response.json())
+      .then((response) => {
+        console.log(response);
+        console.log(response.position);
+        const courses = response.courses_teaching.map((course) => {
+          return response.courses_teaching.length > 1
+            ? course.course_code + ", "
+            : course.course_code;
+        });
+        console.log(courses);
+
+        // setting state variables
+        this.setState({
+          username: response.user_name,
+          full_name: response.lecturer_name,
+          position: response.position,
+          courses: courses,
+        });
+
+        // setting values to session storage
+        sessionStorage.setItem("course_count", response.course_count);
+        sessionStorage.setItem("courses", courses);
+      })
+      .catch((error) => {
+        console.log("cant fetch data");
+      });
+  }
+
   render() {
     return (
       <div
@@ -47,178 +91,158 @@ class Overview extends Component {
               marginBottom: "20px",
             }}
           />
-          {[
-            {
-              position: "Lecturer",
-              course_teaching: "CS 441 Wide Area Networks",
-              academic_rank: "Proffesor",
-            },
-          ].map((detail, index) => {
-            return (
-              <div
-                style={{
-                  width: "100%",
-                }}
-              >
-                <Row
+          <div
+            style={{
+              width: "100%",
+            }}
+          >
+            <Row
+              style={{
+                width: "100%",
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
+              <Col span={12}>
+                <div
                   style={{
-                    width: "100%",
                     display: "flex",
+                    justifyContent: "flex-end",
                     alignItems: "center",
+                    flexDirection: "row",
                   }}
                 >
-                  <Col span={12}>
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "flex-end",
-                        alignItems: "center",
-                        flexDirection: "row",
-                      }}
-                    >
-                      <Typography
-                        style={{
-                          marginRight: "5px",
-                        }}
-                      >
-                        position
-                      </Typography>
-                    </div>
-                  </Col>
-                  <Col span={12}>
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "flex-start",
-                        alignItems: "center",
-                        flexDirection: "row",
-                      }}
-                    >
-                      <Typography
-                        style={{
-                          color: "black",
-                          fontWeight: "bold",
-                          marginLeft: "5px",
-                        }}
-                      >
-                        {detail.position}
-                      </Typography>
-                    </div>
-                  </Col>
-                </Row>
-                <Row
+                  <Typography style={{ marginRight: "5px" }}>
+                    username
+                  </Typography>
+                </div>
+              </Col>
+              <Col span={12}>
+                <div
                   style={{
-                    width: "100%",
                     display: "flex",
+                    justifyContent: "flex-start",
                     alignItems: "center",
+                    flexDirection: "row",
                   }}
                 >
-                  <Col span={12}>
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "flex-end",
-                        alignItems: "center",
-                        flexDirection: "row",
-                      }}
-                    >
-                      <Typography
-                        style={{
-                          marginRight: "5px",
-                        }}
-                      >
-                        course teaching
-                      </Typography>
-                    </div>
-                  </Col>
-                  <Col span={12}>
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "flex-start",
-                        alignItems: "center",
-                        flexDirection: "row",
-                      }}
-                    >
-                      <Typography
-                        style={{
-                          color: "black",
-                          fontWeight: "bold",
-                          marginLeft: "5px",
-                        }}
-                      >
-                        {detail.course_teaching}
-                      </Typography>
-                    </div>
-                  </Col>
-                </Row>
-                <Row
+                  <Typography className="typo">
+                    {this.state.username}
+                  </Typography>
+                </div>
+              </Col>
+            </Row>
+            <Row
+              style={{
+                width: "100%",
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
+              <Col span={12}>
+                <div
                   style={{
-                    width: "100%",
                     display: "flex",
+                    justifyContent: "flex-end",
                     alignItems: "center",
+                    flexDirection: "row",
                   }}
                 >
-                  <Col span={12}>
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "flex-end",
-                        alignItems: "center",
-                        flexDirection: "row",
-                      }}
-                    >
-                      <Typography
-                        style={{
-                          marginRight: "5px",
-                        }}
-                      >
-                        academic rank
-                      </Typography>
-                    </div>
-                  </Col>
-                  <Col span={12}>
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "flex-start",
-                        alignItems: "center",
-                        flexDirection: "row",
-                      }}
-                    >
-                      <Typography
-                        style={{
-                          color: "black",
-                          fontWeight: "bold",
-                          marginLeft: "5px",
-                        }}
-                      >
-                        {detail.academic_rank}
-                      </Typography>
-                    </div>
-                  </Col>
-                </Row>
-                {/* <Typography>
-                  position:{" "}
-                  <span style={{ color: "black", fontWeight: "bold" }}>
-                    {detail.position}
-                  </span>
-                </Typography>
-                <Typography>
-                  course teaching:{" "}
-                  <span style={{ color: "black", fontWeight: "bold" }}>
-                    {detail.course_teaching}
-                  </span>
-                </Typography>
-                <Typography>
-                  academic rank:{" "}
-                  <span style={{ color: "black", fontWeight: "bold" }}>
-                    {detail.academic_rank}
-                  </span>
-                </Typography> */}
-              </div>
-            );
-          })}
+                  <Typography style={{ marginRight: "5px" }}>
+                    username
+                  </Typography>
+                </div>
+              </Col>
+              <Col span={12}>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "flex-start",
+                    alignItems: "center",
+                    flexDirection: "row",
+                  }}
+                >
+                  <Typography className="typo">
+                    {this.state.full_name}
+                  </Typography>
+                </div>
+              </Col>
+            </Row>
+            <Row
+              style={{
+                width: "100%",
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
+              <Col span={12}>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "flex-end",
+                    alignItems: "center",
+                    flexDirection: "row",
+                  }}
+                >
+                  <Typography
+                    style={{
+                      marginRight: "5px",
+                    }}
+                  >
+                    position
+                  </Typography>
+                </div>
+              </Col>
+              <Col span={12}>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "flex-start",
+                    alignItems: "center",
+                    flexDirection: "row",
+                  }}
+                >
+                  <Typography className="typo">
+                    {this.state.position}
+                  </Typography>
+                </div>
+              </Col>
+            </Row>
+            <Row
+              style={{
+                width: "100%",
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
+              <Col span={12}>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "flex-end",
+                    alignItems: "center",
+                    flexDirection: "row",
+                  }}
+                >
+                  <Typography style={{ marginRight: "5px" }}>
+                    course teaching
+                  </Typography>
+                </div>
+              </Col>
+              <Col span={12}>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "flex-start",
+                    alignItems: "center",
+                    flexDirection: "row",
+                  }}
+                >
+                  <Typography className="typo">{this.state.courses}</Typography>
+                </div>
+              </Col>
+            </Row>
+          </div>
         </div>
       </div>
     );
