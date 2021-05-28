@@ -11,7 +11,7 @@ class Criteria extends Component {
   };
 
   componentDidMount() {
-    fetch("http://127.0.0.1:8000/api/assessmentCriteria", {
+    fetch("http://127.0.0.1:8000/api/ca_items", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -22,11 +22,13 @@ class Criteria extends Component {
       .then((response) => {
         console.log(response);
         const criteria = response.map((criteria) => {
-          return criteria.criteria_name;
+          return criteria.ca_item_name;
         });
         console.log(criteria);
         this.setState({ assessment_criteria: criteria });
         console.log(this.state.assessment_criteria);
+        console.log("course count: " + sessionStorage.getItem("course_count"));
+        console.log("courses: " + sessionStorage.getItem("courses"));
       })
       .catch((error) => {
         console.log("cant do that");
@@ -41,7 +43,7 @@ class Criteria extends Component {
             mode="multiple"
             size="middle"
             placeholder="Please select a criteria"
-            // defaultValue={["Assignment", "Test 1"]}
+            // defaultValue={["0", "5"]}
             onChange={(value) => {
               // console.log(value);
               this.setState({
@@ -54,7 +56,7 @@ class Criteria extends Component {
             style={{ width: "100%" }}
           >
             {this.state.assessment_criteria.map((criteria, index) => {
-              return <Option key={index.toString(36)}>{criteria}</Option>;
+              return <Option key={index}>{criteria}</Option>;
             })}
           </Select>
         </div>
@@ -71,12 +73,7 @@ class Criteria extends Component {
               justifyContent: "start",
               alignItems: "center",
               flexDirection: "column",
-              // marginTop: "50px",
               padding: "30px",
-              // borderRadius: "10px",
-              // boxShadow:
-              //   "10px 10px 20px rgba(255,255,255,0.2), 10px 10px 20px rgba(20,10,0,0.2)",
-              // backgroundColor: "#e3f6f5",
             }}
           >
             <Typography style={{ marginBottom: "20px" }}>
@@ -90,6 +87,7 @@ class Criteria extends Component {
               console.log(criteria);
               return (
                 <div
+                  key={index}
                   style={{
                     backgroundColor: "white",
                     height: 80,
@@ -112,16 +110,49 @@ class Criteria extends Component {
                       alignItems: "center",
                     }}
                   >
-                    <Col span={8}>
+                    <Col span={3}>
                       <Typography key={index}>{criteria}</Typography>
+                    </Col>
+                    <Col span={6}>
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "center",
+                          justifyContent: "flex-start",
+                          alignItems: "center",
+                          flexDirection: "row",
+                        }}
+                      >
+                        <Typography
+                          key={index + 1}
+                          style={{ marginRight: "20px" }}
+                        >
+                          The{" "}
+                          <span style={{ color: "black", fontWeight: "bold" }}>
+                            number
+                          </span>{" "}
+                          of questions
+                        </Typography>
+                        <InputNumber
+                          size="large"
+                          min={1}
+                          max={40}
+                          defaultValue={3}
+                          onChange={(value) => {
+                            console.log(value);
+                          }}
+                        />
+                      </div>
                     </Col>
                     <Col span={8}>
                       <div
                         style={{
                           display: "flex",
                           justifyContent: "center",
+                          // justifyContent: "flex-start",
                           alignItems: "center",
                           flexDirection: "row",
+                          // paddingLeft: "10px",
                         }}
                       >
                         <Typography
@@ -144,7 +175,7 @@ class Criteria extends Component {
                         />
                       </div>
                     </Col>
-                    <Col span={8}>
+                    <Col span={7}>
                       <div
                         style={{
                           display: "flex",
@@ -167,79 +198,17 @@ class Criteria extends Component {
                         <DatePicker
                           onChange={(date, dateString) => {
                             // console.log(date, dateString);
-                            // console.log(date);
-                            console.log(dateString);
+                            const end_year = dateString.slice(0, 4);
+                            const start_year = (
+                              Number(end_year) - 1
+                            ).toString();
+                            const academic_year = start_year + "/" + end_year;
+                            console.log(academic_year);
                           }}
                         />
                       </div>
                     </Col>
                   </Row>
-                  {/* <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "space-around",
-                      alignItems: "center",
-                      flexDirection: "row",
-                    }}
-                  >
-                    <Typography key={index} style={{ marginRight: "20px" }}>
-                      {criteria}
-                    </Typography>
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "space-evenly",
-                        alignItems: "center",
-                        flexDirection: "row",
-                      }}
-                    >
-                      <Typography
-                        key={index + 1}
-                        style={{ marginRight: "20px" }}
-                      >
-                        Contribution to CA{" "}
-                        <span style={{ color: "black", fontWeight: "bold" }}>
-                          less than 40
-                        </span>
-                      </Typography>
-                      <InputNumber
-                        size="large"
-                        min={1}
-                        max={40}
-                        defaultValue={3}
-                        onChange={(value) => {
-                          console.log(value);
-                        }}
-                      />
-                    </div>
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "space-evenly",
-                        alignItems: "center",
-                        flexDirection: "row",
-                      }}
-                    >
-                      <Typography
-                        key={index + 1}
-                        style={{ marginRight: "20px" }}
-                      >
-                        The{" "}
-                        <span style={{ color: "black", fontWeight: "bold" }}>
-                          {" "}
-                          date{" "}
-                        </span>{" "}
-                        of occurance
-                      </Typography>
-                      <DatePicker
-                        onChange={(date, dateString) => {
-                          // console.log(date, dateString);
-                          // console.log(date);
-                          console.log(dateString);
-                        }}
-                      />
-                    </div>
-                  </div> */}
                 </div>
               );
             })}

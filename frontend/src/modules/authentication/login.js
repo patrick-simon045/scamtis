@@ -19,7 +19,8 @@ export default function NormalLoginForm() {
       .then(async (response) => {
         console.log(await response);
         // only the token
-        // console.log(response.token);
+        console.log(typeof response.token);
+        sessionStorage.setItem("token", response.token);
 
         // navigating to main page
         history.replace("/home/");
