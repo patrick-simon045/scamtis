@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Result, CA_Item, Lecture_Course
+from .models import Result, CA_Item, Lecture_Course, Assessment
 
 
 class ResultSerializer(serializers.ModelSerializer):
@@ -12,6 +12,12 @@ class CA_ItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = CA_Item
         fields = ['ca_item_name']
+
+
+class AssessmentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Assessment
+        fields = ['criteria', 'course', 'academic_year', 'date_taken', 'number_of_questions', 'contribution']
 
 
 class LecturerCourseSerializer(serializers.ModelSerializer):

@@ -1,16 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="07702d9d-9826-4868-8604-7487e975a5c3" name="Default Changelist" comment="updated results api">
-      <change afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
+    <list default="true" id="07702d9d-9826-4868-8604-7487e975a5c3" name="Default Changelist" comment="lecture(user) details api creation">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backendapi/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/backendapi/admin.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backendapi/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/backendapi/models.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backendapi/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/backendapi/serializers.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backendapi/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/backendapi/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backendapi/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/backendapi/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/generate_token_for_all_users.py" beforeDir="false" afterPath="$PROJECT_DIR$/generate_token_for_all_users.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/newBackend/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/newBackend/urls.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -96,7 +93,14 @@
       <option name="project" value="LOCAL" />
       <updated>1622118675796</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="lecture(user) details api creation">
+      <created>1622225318210</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1622225318210</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -118,6 +122,7 @@
     <MESSAGE value="models modification" />
     <MESSAGE value="success implementing model field value from other fields in the same world" />
     <MESSAGE value="updated results api" />
-    <option name="LAST_COMMIT_MESSAGE" value="updated results api" />
+    <MESSAGE value="lecture(user) details api creation" />
+    <option name="LAST_COMMIT_MESSAGE" value="lecture(user) details api creation" />
   </component>
 </project>

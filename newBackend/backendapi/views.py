@@ -8,7 +8,7 @@ from rest_framework.authtoken.models import Token
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .serializers import ResultSerializer, CA_ItemSerializer, LecturerCourseSerializer
+from .serializers import ResultSerializer, CA_ItemSerializer, LecturerCourseSerializer, AssessmentSerializer
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework import authentication
@@ -74,7 +74,7 @@ def get_list_of_courses_for_a_lecturer(list_of_lecturer_course_instance):
     return courses
 
 
-@api_view()
+@api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def lecturer_details(request):
     usernames = [user.username for user in User.objects.all()]
@@ -82,9 +82,8 @@ def lecturer_details(request):
     authorization_token = request.META.get('HTTP_AUTHORIZATION')
     token = authorization_token[6:]
 
-    user = get_user_from_token(token)
-
     try:
+        user = get_user_from_token(token)
         lecturer = get_lecturer_from_user(user)
         lecturer_name = get_lecturer_name(lecturer)
         courses = get_courses_assigned_to_a_lecturer(lecturer)
@@ -105,12 +104,44 @@ def lecturer_details(request):
     return Response("Nothing to show")
 
 
+@api_view(["GET", "POST"])
+@permission_classes([IsAuthenticated])
+def assessment_details(request):
+    authorization_token = request.META.get('HTTP_AUTHORIZATION')
+    token = authorization_token[6:]
+
+    if request.method == 'GET':
+        try:
+            user = get_user_from_token(token)
+            lecturer = get_lecturer_from_user(user)
+            courses = get_courses_assigned_to_a_lecturer(lecturer)
+
+            courses_list = []
+            for course in courses:
+                courses_list.append(course["course_code"])
+
+            assessments = Assessment.objects.filter(course__in=courses_list)
+            serializer = AssessmentSerializer(assessments, many=True)
+            return Response(serializer.data)
+
+        except ObjectDoesNotExist as error:
+            print("error message: {}".format(error))
+
+    elif request.method == "POST":
+        serializer = AssessmentSerializer(data=request.data)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
 #
 #
 # end lecturer api
 #
 #
-
 
 def export_users_xls(request):
     response = HttpResponse(content_type='application/ms-excel')

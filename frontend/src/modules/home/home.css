@@ -4,3 +4,32 @@
   margin-left: 5px;
   font-size: 20px;
 }
+
+.iconContainer {
+  width: 50px;
+  height: 80px;
+  background-color: white;
+  box-shadow: 10px 10px 20px rgba(255, 255, 255, 0.2),
+    10px 10px 20px rgba(20, 10, 0, 0.2);
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.3s ease-in-out;
+  margin-left: 10px;
+}
+
+.deleteIcon {
+  color: white;
+}
+
+.iconContainer:hover {
+  background-color: #002140;
+  color: white;
+}
+
+.submitButton {
+  border-radius: 20px;
+  width: 50px;
+}

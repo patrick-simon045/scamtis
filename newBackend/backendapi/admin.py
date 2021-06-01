@@ -33,7 +33,7 @@ admin.site.register(Program)
 
 # admin.site.register(Course)
 class CourseAdmin(admin.ModelAdmin):
-    list_display = ('course_code', 'course_name')
+    list_display = ('course_code', 'course_name', 'credits')
 
 
 admin.site.register(Course, CourseAdmin)
@@ -42,7 +42,7 @@ admin.site.register(Course, CourseAdmin)
 # admin.site.register(Program_Course)
 class Program_CourseAdmin(admin.ModelAdmin):
     list_display = ('course', 'program', 'academic_year', 'semester', 'course_type', 'year_of_study')
-    list_filter = ('program', 'course_type', 'year_of_study', 'semester', 'course', 'academic_year')
+    list_filter = ('program', 'course_type', 'year_of_study', 'semester', 'academic_year')
 
 
 admin.site.register(Program_Course, Program_CourseAdmin)

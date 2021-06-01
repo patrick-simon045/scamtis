@@ -9,5 +9,6 @@ router.register(r'ca_items', views.CA_ItemsViewset)
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('lecturers/', views.lecturer_details, name='rest_framework')
+    path('lecturers/', views.lecturer_details, name='lecturers'),
+    path('assessments/', views.assessment_details, name='assessments')
 ]

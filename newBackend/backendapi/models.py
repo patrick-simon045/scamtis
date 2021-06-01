@@ -16,9 +16,15 @@ class Role(models.Model):
 
 
 class Course(models.Model):
+
+    CREDITS = (
+        ("12", 12), ("8", 8)
+    )
+
     course_code = models.CharField(max_length=50, primary_key=True)
     course_name = models.CharField(max_length=50)
     program = models.ManyToManyField("Program", through='Program_Course')
+    credits = models.IntegerField(default=12, validators=[MaxValueValidator(16), MinValueValidator(8)])
 
     def __str__(self):
         return self.course_code
@@ -167,19 +173,19 @@ class Student(models.Model):
 
 class Assessment(models.Model):
     ACADEMIC_YEAR = (
-        ('a', '2020/2021'),
-        ('b', '2021/2022'),
-        ('c', '2022/2023'),
-        ('d', '2023/2024'),
-        ('e', '2024/2025'),
-        ('f', '2025/2026'),
+        ('2020/2021', '2020/2021'),
+        ('2021/2022', '2021/2022'),
+        ('2022/2023', '2022/2023'),
+        ('2023/2024', '2023/2024'),
+        ('2024/2025', '2024/2025'),
+        ('2025/2026', '2025/2026'),
     )
 
     criteria = models.ForeignKey(
         'CA_Item', related_name='assessment', on_delete=models.CASCADE)
     course = models.ForeignKey(
         'Course', related_name='assessment', on_delete=models.CASCADE)
-    academic_year = models.CharField(max_length=9, choices=ACADEMIC_YEAR, default='a')
+    academic_year = models.CharField(max_length=9, choices=ACADEMIC_YEAR, default='2020/2021')
     # time = models.CharField(max_length=8, choices=TIME, default='a')
     date_taken = models.DateField(verbose_name='Date', auto_now_add=False)
     # total_mark = models.IntegerField(default=20, verbose_name='Total marks',

@@ -4,10 +4,10 @@ import "../home.css";
 
 class Overview extends Component {
   state = {
-    username: "Not fetched",
-    full_name: "Not fetched",
-    position: "Not fetched",
-    courses: ["Not fetched"],
+    username: "",
+    full_name: "",
+    position: "",
+    courses: [""],
   };
 
   componentDidMount() {
@@ -22,24 +22,36 @@ class Overview extends Component {
       .then((response) => {
         console.log(response);
         console.log(response.position);
-        const courses = response.courses_teaching.map((course) => {
+        // const courses = response.courses_teaching.map((course) => {
+        //   return response.courses_teaching.length > 1
+        //     ? course.course_code + ", "
+        //     : course.course_code;
+        // });
+        // console.log(courses);
+
+        const course_list = response.courses_teaching.map((course, index) => {
           return response.courses_teaching.length > 1
             ? course.course_code + ", "
             : course.course_code;
         });
-        console.log(courses);
 
         // setting state variables
         this.setState({
           username: response.user_name,
           full_name: response.lecturer_name,
           position: response.position,
-          courses: courses,
+          courses: course_list,
         });
 
         // setting values to session storage
         sessionStorage.setItem("course_count", response.course_count);
-        sessionStorage.setItem("courses", courses);
+        sessionStorage.setItem("courses", course_list);
+
+        console.log(course_list);
+        console.log(sessionStorage.getItem("courses"));
+        //     // return course_list.push({response.courses_teaching.course_code});
+        //   })
+        // );
       })
       .catch((error) => {
         console.log("cant fetch data");
