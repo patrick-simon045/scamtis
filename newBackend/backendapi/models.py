@@ -24,7 +24,8 @@ class Course(models.Model):
     course_code = models.CharField(max_length=50, primary_key=True)
     course_name = models.CharField(max_length=50)
     program = models.ManyToManyField("Program", through='Program_Course')
-    credits = models.IntegerField(default=12, validators=[MaxValueValidator(16), MinValueValidator(8)])
+    credits = models.IntegerField(default=12, validators=[
+                                  MaxValueValidator(16), MinValueValidator(8)])
 
     def __str__(self):
         return self.course_code
@@ -115,12 +116,16 @@ class Program_Course(models.Model):
         MaxValueValidator(2),
         MinValueValidator(1),
     ], default=1)
-    course_type = models.CharField(max_length=10, choices=COURSE_TYPE, default='core', null=True)
-    year_of_study = models.CharField(max_length=1, choices=YEARS_OF_STUDY, default='1')
-    academic_year = models.CharField(max_length=9, choices=ACADEMIC_YEAR, default='a')
+    course_type = models.CharField(
+        max_length=10, choices=COURSE_TYPE, default='core', null=True)
+    year_of_study = models.CharField(
+        max_length=1, choices=YEARS_OF_STUDY, default='1')
+    academic_year = models.CharField(
+        max_length=9, choices=ACADEMIC_YEAR, default='a')
 
     class Meta:
-        unique_together = ['course', 'program', 'academic_year', 'semester', 'course_type', 'year_of_study']
+        unique_together = ['course', 'program', 'academic_year',
+                           'semester', 'course_type', 'year_of_study']
 
 
 class Lecture_Course(models.Model):
@@ -143,7 +148,8 @@ class Lecture_Course(models.Model):
     #     MaxValueValidator(40),
     #     MinValueValidator(0),
     # ], default=20)
-    academic_year = models.CharField(max_length=9, choices=ACADEMIC_YEAR, default='a')
+    academic_year = models.CharField(
+        max_length=9, choices=ACADEMIC_YEAR, default='a')
 
     def __str__(self):
         return '{} {}'.format(self.lecturer, self.course)
@@ -185,9 +191,11 @@ class Assessment(models.Model):
         'CA_Item', related_name='assessment', on_delete=models.CASCADE)
     course = models.ForeignKey(
         'Course', related_name='assessment', on_delete=models.CASCADE)
-    academic_year = models.CharField(max_length=9, choices=ACADEMIC_YEAR, default='2020/2021')
+    academic_year = models.CharField(
+        max_length=9, choices=ACADEMIC_YEAR, default='2020/2021')
     # time = models.CharField(max_length=8, choices=TIME, default='a')
-    date_taken = models.DateField(verbose_name='Date', auto_now_add=False)
+    # date_taken = models.DateField(verbose_name='Date', auto_now_add=False)
+    date_taken = models.CharField(verbose_name='Date', max_length=10)
     # total_mark = models.IntegerField(default=20, verbose_name='Total marks',
     #                                  validators=[MaxValueValidator(100), MinValueValidator(0)])
     number_of_questions = models.IntegerField(
@@ -216,7 +224,8 @@ class Assessment_Results(models.Model):
         'Assessment', related_name='result', on_delete=models.CASCADE)
     student = models.ForeignKey(
         'Student', related_name='assessment_result', on_delete=models.CASCADE)
-    score = models.IntegerField(validators=[MaxValueValidator(100), MinValueValidator(0)])
+    score = models.IntegerField(
+        validators=[MaxValueValidator(100), MinValueValidator(0)])
 
     # academic_year = models.CharField(max_length=9, choices=ACADEMIC_YEAR, default='a')
 
@@ -323,7 +332,8 @@ class Result(models.Model):
     sum = models.PositiveSmallIntegerField(null=True)
 
     def save(self, *args, **kwargs):
-        self.sum = self.first_question + self.second_question + self.third_question + self.fourth_question
+        self.sum = self.first_question + self.second_question + \
+            self.third_question + self.fourth_question
         super(Result, self).save(*args, **kwargs)
 
     def __str__(self):
@@ -357,7 +367,8 @@ class CA(models.Model):
     student = models.ForeignKey('Student', on_delete=models.CASCADE)
     course = models.ForeignKey('Course', on_delete=models.CASCADE)
     ca = models.IntegerField(null=True)
-    academic_year = models.CharField(max_length=9, choices=ACADEMIC_YEAR, default='a')
+    academic_year = models.CharField(
+        max_length=9, choices=ACADEMIC_YEAR, default='a')
 
     def __str__(self):
         return f'{self.student} {self.ca}'

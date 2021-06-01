@@ -5,7 +5,8 @@ from .models import Result, CA_Item, Lecture_Course, Assessment
 class ResultSerializer(serializers.ModelSerializer):
     class Meta:
         model = Result
-        fields = ['id', 'first_question', 'second_question', 'third_question', 'fourth_question']
+        fields = ['id', 'first_question', 'second_question',
+                  'third_question', 'fourth_question']
 
 
 class CA_ItemSerializer(serializers.ModelSerializer):
@@ -17,7 +18,8 @@ class CA_ItemSerializer(serializers.ModelSerializer):
 class AssessmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Assessment
-        fields = ['criteria', 'course', 'academic_year', 'date_taken', 'number_of_questions', 'contribution']
+        fields = ['id', 'criteria', 'course', 'academic_year',
+                  'date_taken', 'number_of_questions', 'contribution']
 
 
 class LecturerCourseSerializer(serializers.ModelSerializer):

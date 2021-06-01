@@ -49,7 +49,8 @@ def get_lecturer_from_user(user):
 def get_lecturer_name(lecturer):
     lecturer_first_name = lecturer.lecturer.first_name
     lecturer_last_name = lecturer.lecturer.last_name
-    print("lecturer name: {} {}".format(lecturer_first_name, lecturer_last_name))
+    print("lecturer name: {} {}".format(
+        lecturer_first_name, lecturer_last_name))
     return "{} {}".format(lecturer_first_name, lecturer_last_name)
 
 
@@ -57,7 +58,8 @@ def get_courses_assigned_to_a_lecturer(lecturer):
     lecturer_course = Lecture_Course.objects.filter(lecturer=lecturer)
     print(lecturer_course)
     courses = get_list_of_courses_for_a_lecturer(lecturer_course)
-    print("number of courses assigned to {}: {}".format(get_lecturer_name(lecturer), len(courses)))
+    print("number of courses assigned to {}: {}".format(
+        get_lecturer_name(lecturer), len(courses)))
     print(courses)
     return courses
 
@@ -78,7 +80,8 @@ def get_list_of_courses_for_a_lecturer(list_of_lecturer_course_instance):
 @permission_classes([IsAuthenticated])
 def lecturer_details(request):
     usernames = [user.username for user in User.objects.all()]
-    print("token from request header: {}".format(request.META.get('HTTP_AUTHORIZATION')))
+    print("token from request header: {}".format(
+        request.META.get('HTTP_AUTHORIZATION')))
     authorization_token = request.META.get('HTTP_AUTHORIZATION')
     token = authorization_token[6:]
 
@@ -137,11 +140,31 @@ def assessment_details(request):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+@api_view(["PUT", "DELETE"])
+@permission_classes([IsAuthenticated])
+def assessment_details_update_delete(request, pk):
+    try:
+        assessment = Assessment.objects.get(pk=pk)
+    except Assessment.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == "DELETE":
+        assessment.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+    elif request.method == 'PUT':
+        serializer = AssessmentSerializer(assessment, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 #
 #
 # end lecturer api
 #
 #
+
 
 def export_users_xls(request):
     response = HttpResponse(content_type='application/ms-excel')
@@ -163,7 +186,8 @@ def export_users_xls(request):
     bottom_row = 1
     left_column = 0
     right_column = 3
-    ws.write_merge(top_row, bottom_row, left_column, right_column, 'UNIVERSITY OF DAR ES SALAAM', horz_style)
+    ws.write_merge(top_row, bottom_row, left_column, right_column,
+                   'UNIVERSITY OF DAR ES SALAAM', horz_style)
     # end of first row
 
     # writing the second row
@@ -218,12 +242,14 @@ def export_users_xls(request):
         cwidth = ws.col(col_num).width
         if (len(columns[col_num]) * 367) > cwidth:
             ws.col(col_num).width = (len(columns[col_num]) * 367)
-        ws.write(row_num, col_num, columns[col_num], font_style)  # at 0 row 0 column
+        # at 0 row 0 column
+        ws.write(row_num, col_num, columns[col_num], font_style)
 
     # Sheet body, remaining rows
     font_style = xlwt.XFStyle()
 
-    rows = User.objects.all().values_list('username', 'first_name', 'last_name', 'email')
+    rows = User.objects.all().values_list(
+        'username', 'first_name', 'last_name', 'email')
     for row in rows:
         row_num += 1
         for col_num in range(len(row)):

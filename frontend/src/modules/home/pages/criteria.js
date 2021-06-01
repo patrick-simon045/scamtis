@@ -10,11 +10,47 @@ import {
   Button,
 } from "antd";
 
-import { DeleteOutlined, CheckOutlined } from "@ant-design/icons";
+import {
+  DeleteOutlined,
+  CheckOutlined,
+  RetweetOutlined,
+} from "@ant-design/icons";
 
 import "../home.css";
 
 const { Option } = Select;
+
+function submit_assessment_values(
+  criteria,
+  course,
+  academic_year,
+  date_taken,
+  number_of_questions,
+  contribution
+) {
+  fetch("http://127.0.0.1:8000/api/assessments/", {
+    methood: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Token " + sessionStorage.getItem("token"),
+    },
+    body: {
+      criteria: criteria,
+      course: course,
+      academic_year: academic_year,
+      date_taken: date_taken,
+      number_of_questions: number_of_questions,
+      contribution: contribution,
+    },
+  })
+    .then((response) => response.json())
+    .then((response) => {
+      console.log(response);
+    })
+    .catch((error) => {
+      console.log("error obtained: " + error);
+    });
+}
 
 class Criteria extends Component {
   state = {
@@ -25,6 +61,8 @@ class Criteria extends Component {
     assessments: [],
     courses: [],
     selected_course: "",
+    academic_year: "",
+    date: "",
     // courses: sessionStorage.getItem("courses"),
   };
 
@@ -96,6 +134,7 @@ class Criteria extends Component {
       .then((response) => response.json())
       .then((response) => {
         console.log(response);
+        this.setState({ assessments: response });
       });
   }
 
@@ -214,7 +253,7 @@ class Criteria extends Component {
                         >
                           <Typography
                             key={index + 1}
-                            style={{ marginRight: "20px" }}
+                            style={{ marginRight: "20px", fontSize: "13px" }}
                           >
                             The{" "}
                             <span
@@ -292,14 +331,32 @@ class Criteria extends Component {
                           </Typography>
                           <DatePicker
                             onChange={(date, dateString) => {
-                              // console.log(date, dateString);
-                              console.log(dateString.slice(0, 6));
-                              const end_year = dateString.slice(0, 4);
-                              const start_year = (
-                                Number(end_year) - 1
-                              ).toString();
-                              const academic_year = start_year + "/" + end_year;
+                              console.log(dateString);
+                              console.log(dateString.slice(0, 4));
+                              console.log(dateString.slice(5, 7));
+
+                              let year = parseInt(dateString.slice(0, 4));
+                              let month = parseInt(dateString.slice(5, 7));
+                              console.log(month);
+                              console.log(year);
+
+                              let academic_year = "";
+
+                              if (month >= 11) {
+                                const end_year = year + 1;
+                                const start_year = year;
+                                academic_year = start_year + "/" + end_year;
+                              } else {
+                                const end_year = year;
+                                const start_year = year - 1;
+                                academic_year = start_year + "/" + end_year;
+                              }
+
                               console.log(academic_year);
+                              this.setState({
+                                academic_year: academic_year,
+                                date: dateString,
+                              });
                             }}
                           />
                         </div>
@@ -310,15 +367,68 @@ class Criteria extends Component {
                     key={index + 1}
                     className="iconContainer"
                     onClick={() => {
-                      console.log(index);
-                      console.log(this.state.selected_course);
-                      console.log(sessionStorage.getItem("token"));
-                      // console.log(sessionStorage.getItem("courses"));
-                      // console.log(sessionStorage.getItem("course_count"));
-                      console.log({ criteria }.criteria);
-                      console.log(this.state.chosen_criteria);
-                      console.log(this.state.number_of_questions);
-                      console.log(this.state.contribution_to_ca);
+                      // console.log("course: " + this.state.selected_course);
+                      // console.log(
+                      //   "course: " + typeof this.state.selected_course
+                      // );
+                      // console.log("token: " + sessionStorage.getItem("token"));
+                      // console.log(
+                      //   "token: " + typeof sessionStorage.getItem("token")
+                      // );
+                      // // console.log(sessionStorage.getItem("courses"));
+                      // // console.log(sessionStorage.getItem("course_count"));
+                      // console.log("criteria: " + { criteria }.criteria);
+                      // console.log("criteria: " + typeof { criteria }.criteria);
+                      // console.log("date: " + this.state.date);
+                      // console.log("date: " + typeof this.state.date);
+                      // console.log("academic year: " + this.state.academic_year);
+                      // console.log(
+                      //   "academic year: " + typeof this.state.academic_year
+                      // );
+                      // console.log(
+                      //   "number of questions: " + this.state.number_of_questions
+                      // );
+                      // console.log(
+                      //   "number of questions: " +
+                      //     typeof this.state.number_of_questions
+                      // );
+                      // console.log(
+                      //   "contribution to ca: " + this.state.contribution_to_ca
+                      // );
+                      // console.log(
+                      //   "contribution to ca: " +
+                      //     typeof this.state.contribution_to_ca
+                      // );
+
+                      const data = {
+                        criteria: { criteria }.criteria,
+                        course: this.state.selected_course,
+                        academic_year: this.state.academic_year,
+                        date_taken: this.state.date,
+                        number_of_questions: this.state.number_of_questions,
+                        contribution: this.state.contribution_to_ca,
+                      };
+
+                      console.log(data);
+
+                      // send assessment details to database
+                      fetch("http://127.0.0.1:8000/api/assessments/", {
+                        method: "POST",
+                        headers: {
+                          "Content-Type": "application/json",
+                          Authorization:
+                            "Token " + sessionStorage.getItem("token"),
+                        },
+                        body: JSON.stringify(data),
+                      })
+                        .then((response) => response.json())
+                        .then((response) => {
+                          console.log(response);
+                          window.location.reload(false);
+                        })
+                        .catch((error) => {
+                          console.log("error obtained: " + error);
+                        });
                     }}
                   >
                     <CheckOutlined className="submitIcon" />
@@ -326,11 +436,55 @@ class Criteria extends Component {
                   <div
                     className="iconContainer"
                     onClick={() => {
-                      console.log("clicked");
+                      const data = {
+                        criteria: { criteria }.criteria,
+                        course: this.state.selected_course,
+                        academic_year: this.state.academic_year,
+                        date_taken: this.state.date,
+                        number_of_questions: this.state.number_of_questions,
+                        contribution: this.state.contribution_to_ca,
+                      };
+
+                      console.log(data);
+                    }}
+                  >
+                    <RetweetOutlined className="deleteIcon" />
+                  </div>
+                  <div
+                    className="iconContainer"
+                    onClick={() => {
+                      console.log(this.state.assessments);
+                      console.log("criteria: " + { criteria }.criteria);
+                      console.log("course: " + this.state.selected_course);
+
+                      const assessment_data = this.state.assessments;
+
+                      for (
+                        let index = 0;
+                        index < assessment_data.length;
+                        index++
+                      ) {
+                        if (
+                          assessment_data[index].criteria ===
+                            { criteria }.criteria ||
+                          assessment_data[index].course ===
+                            this.state.selected_course
+                        ) {
+                          console.log(assessment_data[index]);
+                          return assessment_data[index];
+                        }
+                      }
                     }}
                   >
                     <DeleteOutlined className="deleteIcon" />
                   </div>
+
+                  {/* <Button
+                    style={{ marginLeft: "10px" }}
+                    type="primary"
+                    shape="circle"
+                    icon={<DeleteOutlined />}
+                  /> */}
                 </div>
               );
             })}
