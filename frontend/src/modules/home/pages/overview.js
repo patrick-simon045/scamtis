@@ -56,6 +56,53 @@ class Overview extends Component {
       .catch((error) => {
         console.log("cant fetch data");
       });
+    fetch("http://127.0.0.1:8000/api/assessments/", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Token " + sessionStorage.getItem("token"),
+      },
+    })
+      .then((response) => response.json())
+      .then((response) => {
+        console.log(response);
+
+        // console.log(final_course_list);
+        const course_list = sessionStorage.getItem("courses");
+
+        const number_of_iterations = parseInt((course_list.length - 1) / 6);
+
+        console.log(number_of_iterations);
+
+        const final_course_list = [];
+
+        let start_slicing_value = 0;
+        let end_slicing_value = 6;
+
+        for (var index = 0; index < number_of_iterations; index++) {
+          let course_code = course_list.slice(
+            start_slicing_value,
+            end_slicing_value
+          );
+          // console.log(
+          //   course_list.slice(start_slicing_value, end_slicing_value)
+          // );
+          final_course_list.push(course_code);
+          start_slicing_value = start_slicing_value + 9;
+          end_slicing_value = end_slicing_value + 9;
+        }
+
+        console.log(final_course_list);
+
+        var criteria_list = response.map((criteria_item) => {
+          return criteria_item.criteria;
+        });
+
+        console.log(criteria_list);
+
+        sessionStorage.setItem("criteria_list_from_database", criteria_list);
+        sessionStorage.setItem("final_course_list", final_course_list);
+      });
   }
 
   render() {

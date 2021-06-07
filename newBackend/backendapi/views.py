@@ -150,7 +150,7 @@ def assessment_details_update_delete(request, pk):
 
     if request.method == "DELETE":
         assessment.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response({"message": "deleted successfully", "verified_by": "django"}, status=status.HTTP_204_NO_CONTENT)
 
     elif request.method == 'PUT':
         serializer = AssessmentSerializer(assessment, data=request.data)

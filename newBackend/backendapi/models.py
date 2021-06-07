@@ -192,10 +192,11 @@ class Assessment(models.Model):
     course = models.ForeignKey(
         'Course', related_name='assessment', on_delete=models.CASCADE)
     academic_year = models.CharField(
-        max_length=9, choices=ACADEMIC_YEAR, default='2020/2021')
+        max_length=9, choices=ACADEMIC_YEAR, default='2020/2021', null=True)
     # time = models.CharField(max_length=8, choices=TIME, default='a')
     # date_taken = models.DateField(verbose_name='Date', auto_now_add=False)
-    date_taken = models.CharField(verbose_name='Date', max_length=10)
+    date_taken = models.CharField(
+        verbose_name='Date', max_length=10, null=True)
     # total_mark = models.IntegerField(default=20, verbose_name='Total marks',
     #                                  validators=[MaxValueValidator(100), MinValueValidator(0)])
     number_of_questions = models.IntegerField(

@@ -4,6 +4,7 @@ import {
   GridToolbarContainer,
   GridToolbarExport,
 } from "@material-ui/data-grid";
+import { Typography } from "antd";
 
 function CustomToolbar() {
   return (
@@ -16,8 +17,11 @@ function CustomToolbar() {
 const Results = () => {
   const [data, setData] = useState([]);
   const [rows, setRows] = useState([]);
+  const [criteria_list, setCriteria_list] = useState([]);
 
   useEffect(() => {
+    console.log(sessionStorage.getItem("criteria_list_from_database"));
+    setCriteria_list(sessionStorage.getItem("criteria_list_from_database"));
     fetch("http://127.0.0.1:8000/api/results/", {
       method: "GET",
       headers: {
