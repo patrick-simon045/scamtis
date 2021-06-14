@@ -1,6 +1,6 @@
 import { useFormik } from "formik";
 import * as yup from "yup";
-import { login_user } from "../../adapters/login_adapters/login_user";
+import { login_user } from "./login_user";
 
 function FormValidation(history) {
   const validationSchema = yup.object({
@@ -18,7 +18,8 @@ function FormValidation(history) {
     },
     onSubmit: (values) => {
       console.log(JSON.stringify(values));
-      login_user(values, history);
+      login_user(values);
+      // console.log(response);
       history.replace("/home/");
     },
     validationSchema: validationSchema,
