@@ -56,7 +56,7 @@ def get_lecturer_name(lecturer):
 
 def get_courses_assigned_to_a_lecturer(lecturer):
     lecturer_course = Lecture_Course.objects.filter(lecturer=lecturer)
-    print(lecturer_course)
+    print('lecturer course: {}'.format(lecturer_course))
     courses = get_list_of_courses_for_a_lecturer(lecturer_course)
     print("number of courses assigned to {}: {}".format(
         get_lecturer_name(lecturer), len(courses)))
@@ -66,6 +66,7 @@ def get_courses_assigned_to_a_lecturer(lecturer):
 
 def get_list_of_courses_for_a_lecturer(list_of_lecturer_course_instance):
     courses = []
+
     for lecturer_course_instance in list_of_lecturer_course_instance:
         courses.append(
             {

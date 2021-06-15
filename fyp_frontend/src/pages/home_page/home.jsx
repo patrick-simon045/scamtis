@@ -19,10 +19,7 @@ import CriteriaTab from "./tabs/criteria";
 import ScoresTab from "./tabs/scores";
 import ReportsTab from "./tabs/reports";
 import HomeTab from "./tabs/home";
-import {
-  loginUser,
-  logoutUser,
-} from "../../state/reduxStateSlices/login_pageSlice";
+import { loginUser } from "../../state/reduxStateSlices/login_pageSlice";
 import { getLecturerDetails } from "../../adapters/home_adapters/lecturer_details";
 
 function Home() {
@@ -34,7 +31,9 @@ function Home() {
 
   useEffect(() => {
     console.log("we begin here");
-    getLecturerDetails(dispatch);
+    console.log("getting lecturer details ad updating the store");
+    const response = getLecturerDetails(dispatch);
+    console.log(response);
   }, []);
 
   // useEffect(() => {

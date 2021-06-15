@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useLayoutEffect } from "react";
 import IconButton from "@material-ui/core/IconButton";
 import { useHistory } from "react-router-dom";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import { useStyles } from "../../../styles/material_styles";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { setLecturerDetails } from "../../../state/reduxStateSlices/lecturer_detailsSlice";
 import Popover from "@material-ui/core/Popover";
 import Typography from "@material-ui/core/Typography";
 
@@ -13,6 +14,8 @@ export default function UserAccountIcon() {
   const history = useHistory();
   const classes = useStyles();
   const [name_acronym, setNameAcronym] = useState("");
+
+  const dispatch = useDispatch();
 
   const lectureDetails = useSelector((state) => {
     const stateVariable = state.lecturer;
@@ -25,7 +28,12 @@ export default function UserAccountIcon() {
     };
   });
 
-  useEffect(() => {
+  // useLayoutEffect(() => {
+  //   location.reload();
+  // }, []);
+
+  useLayoutEffect(() => {
+    // location.reload();
     // extracting the first letter in each word
     let acronym = lectureDetails.lecturer_name
       .split(/\s/)
@@ -72,51 +80,51 @@ export default function UserAccountIcon() {
         }}
       >
         <div className={classes.popover}>
-          <div className={classes.image_plus_name}>
-            <img
-              className={classes.image}
-              src="https://images.pexels.com/photos/1789968/pexels-photo-1789968.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
-              alt="Paris"
-            />
-            <Typography className={classes.typography}>
-              {lectureDetails.lecturer_name}
-            </Typography>
-          </div>
-
-          <div className={classes.popover_detail_card}>
-            <Typography className={classes.typography}>
-              username: {lectureDetails.user_name}
-            </Typography>
-          </div>
-
-          <div className={classes.popover_detail_card}>
-            <Typography className={classes.typography}>
-              {/* courses: {lectureDetails.user_name} */}
-              {(function (courses = lectureDetails.courses_teaching) {
-                // extracting course list
-                var list = [];
-                for (let index = 0; index < courses.length; index++) {
-                  const course = courses[index];
-                  list.push(course.course_code);
-                }
-                return "courses: " + list;
-              })()}
-            </Typography>
-          </div>
-
-          <div className={classes.popover_detail_card}>
-            <Typography className={classes.typography}>
-              position: {lectureDetails.position}
-            </Typography>
-          </div>
+          {/* <div className={classes.image_plus_name}></div> */}
+          {/* <img
+            className={classes.image}
+            src="https://images.pexels.com/photos/1789968/pexels-photo-1789968.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
+            alt="Paris"
+          /> */}
+          <Avatar className={classes.image}>{name_acronym}</Avatar>
+          <Typography className={classes.typography}>
+            {lectureDetails.lecturer_name}
+          </Typography>
+          <Typography className={classes.typography}>
+            {lectureDetails.position}
+          </Typography>
+          <Typography className={classes.typography}>
+            {/* courses: {lectureDetails.user_name} */}
+            {(function (courses = lectureDetails.courses_teaching) {
+              // extracting course list
+              var list = [];
+              for (let index = 0; index < courses.length; index++) {
+                const course = courses[index];
+                list.push(course.course_code);
+              }
+              return `${list}`;
+            })()}
+          </Typography>
 
           <div className={classes.logout_button}>
             <Button
               size="large"
-              variant="contained"
+              variant="outlined"
               color="secondary"
+              style={{ textTransform: "none" }}
               onClick={() => {
                 console.log("Logout option tapped");
+                dispatch(
+                  setLecturerDetails({
+                    user_name: "",
+                    lecturer_name: "",
+                    courses_teaching: [],
+                    course_count: 0,
+                    position: "",
+                  })
+                );
+                sessionStorage.removeItem("token");
+                console.log(sessionStorage.getItem("token"));
                 handleClose();
                 history.replace("/");
               }}
