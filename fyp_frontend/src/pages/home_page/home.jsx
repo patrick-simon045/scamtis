@@ -21,10 +21,11 @@ import ReportsTab from "./tabs/reports";
 import HomeTab from "./tabs/home";
 import { loginUser } from "../../state/reduxStateSlices/login_pageSlice";
 import { getLecturerDetails } from "../../adapters/home_adapters/lecturer_details";
-import Ue from "./tabs/ue";
 import UeQuestions from "./tabs/ue_exams";
 import UEQuestionsResults from "./tabs/ue_questions_results";
-import UEQNResult from "./tabs/add_ue_qn_results";
+import UEQNResultAdd from "./tabs/add_ue_qn_results";
+import UEResults from "./tabs/ue_results";
+import UEResultAdd from "./tabs/add_ue_result";
 
 function Home() {
   const isLogged = useSelector((state) => state.login.isLoggedIn);
@@ -105,8 +106,10 @@ function Home() {
         </Drawer>
         <main className={classes.content}>
           <Switch>
+            <Route exact path="/home/scorestab" component={ScoresTab} />
+            <Route exact path="/home/reportstab" component={ReportsTab} />
+            <Route exact path="/home" component={HomeTab} />
             <Route exact path="/home/criteriatab" component={CriteriaTab} />
-            <Route exact path="/home/ue" component={Ue} />
             <Route
               exact
               path="/home/ue_qn_results"
@@ -115,12 +118,11 @@ function Home() {
             <Route
               exact
               path="/home/ue_qn_results/add"
-              component={UEQNResult}
+              component={UEQNResultAdd}
             />
+            <Route exact path="/home/ue_results" component={UEResults} />
+            <Route exact path="/home/ue_results/add" component={UEResultAdd} />
             <Route exact path="/home/ue_questions" component={UeQuestions} />
-            <Route exact path="/home/scorestab" component={ScoresTab} />
-            <Route exact path="/home/reportstab" component={ReportsTab} />
-            <Route exact path="/home" component={HomeTab} />
           </Switch>
         </main>
       </div>
