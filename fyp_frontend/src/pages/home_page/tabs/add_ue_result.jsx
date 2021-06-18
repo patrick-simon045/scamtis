@@ -16,7 +16,7 @@ const tailLayout = {
   },
 };
 
-const UEQNResultAdd = () => {
+const UEResultAdd = () => {
   const [form] = Form.useForm();
 
   const onFinish = (values) => {
@@ -25,22 +25,11 @@ const UEQNResultAdd = () => {
 
   return (
     <Form {...layout} form={form} name="control-hooks" onFinish={onFinish}>
-      <Typography>Add University Exam Questions Result</Typography>
+      <Typography>Add University Exam Result</Typography>
 
       <Form.Item
         name="score"
         label="Score"
-        rules={[
-          {
-            required: true,
-          },
-        ]}
-      >
-        <InputNumber />
-      </Form.Item>
-      <Form.Item
-        name="questionNumber"
-        label="Question Number"
         rules={[
           {
             required: true,
@@ -72,9 +61,9 @@ const UEQNResultAdd = () => {
           },
         ]}
       >
-        <Select placeholder="sample ue" allowClear>
+        <Select placeholder="course" allowClear>
           <Option value="-----">-----</Option>
-          <Option value="ue sample">lau</Option>
+          <Option value="sample course">course</Option>
         </Select>
       </Form.Item>
       <Form.Item {...tailLayout}>
@@ -86,4 +75,4 @@ const UEQNResultAdd = () => {
   );
 };
 
-export default UEQNResultAdd;
+export default UEResultAdd;
