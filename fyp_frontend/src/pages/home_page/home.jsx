@@ -14,13 +14,15 @@ import AppBarTextLogo from "../../components/home_page_components/appBar/appBarT
 import MessageIcon from "../../components/home_page_components/appBar/messages";
 import NotificationIcon from "../../components/home_page_components/appBar/notifications";
 import UserAccountIcon from "../../components/home_page_components/appBar/userAccount";
-import { Route, useHistory } from "react-router-dom";
+import { Route, useHistory, Switch } from "react-router-dom";
 import CriteriaTab from "./tabs/criteria";
 import ScoresTab from "./tabs/scores";
 import ReportsTab from "./tabs/reports";
 import HomeTab from "./tabs/home";
 import { loginUser } from "../../state/reduxStateSlices/login_pageSlice";
 import { getLecturerDetails } from "../../adapters/home_adapters/lecturer_details";
+import Ue from "./tabs/ue";
+import UeQuestions from "./tabs/ue_questions";
 
 function Home() {
   const isLogged = useSelector((state) => state.login.isLoggedIn);
@@ -100,10 +102,14 @@ function Home() {
           </div>
         </Drawer>
         <main className={classes.content}>
-          <Route exact path="/home/criteriatab" component={CriteriaTab} />
-          <Route exact path="/home/scorestab" component={ScoresTab} />
-          <Route exact path="/home/reportstab" component={ReportsTab} />
-          <Route exact path="/home" component={HomeTab} />
+          <Switch>
+            <Route exact path="/home/criteriatab" component={CriteriaTab} />
+            <Route exact path="/home/ue" component={Ue} />
+            <Route exact path="/home/ue_questions" component={UeQuestions} />
+            <Route exact path="/home/scorestab" component={ScoresTab} />
+            <Route exact path="/home/reportstab" component={ReportsTab} />
+            <Route exact path="/home" component={HomeTab} />
+          </Switch>
         </main>
       </div>
     </div>

@@ -1,0 +1,4 @@
+newBackend/testvenv/
+newBackend/backendapi/migrations/__pycache__/
+newBackend/backendapi/__pycache__/
+newBackend/newBackend/__pycache__/
