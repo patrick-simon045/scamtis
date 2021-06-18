@@ -21,10 +21,11 @@ import ReportsTab from "./tabs/reports";
 import HomeTab from "./tabs/home";
 import { loginUser } from "../../state/reduxStateSlices/login_pageSlice";
 import { getLecturerDetails } from "../../adapters/home_adapters/lecturer_details";
-import UeQuestions from "./tabs/ue_exams";
+import UniversityExam from "./tabs/ue_exams";
 import UEQuestionsResults from "./tabs/ue_questions_results";
 import UEQNResultAdd from "./tabs/add_ue_qn_results";
 import UEResults from "./tabs/ue_results";
+import AddUE from "./tabs/add_ue";
 import UEResultAdd from "./tabs/add_ue_result";
 
 function Home() {
@@ -122,7 +123,8 @@ function Home() {
             />
             <Route exact path="/home/ue_results" component={UEResults} />
             <Route exact path="/home/ue_results/add" component={UEResultAdd} />
-            <Route exact path="/home/ue_questions" component={UeQuestions} />
+            <Route exact path="/home/ue" component={UniversityExam} />
+            <Route exact path="/home/ue/add" component={AddUE} />
           </Switch>
         </main>
       </div>

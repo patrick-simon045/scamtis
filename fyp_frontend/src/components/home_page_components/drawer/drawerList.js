@@ -32,7 +32,7 @@ export const drawerList = [
   {
     name: "University Exams",
     icon: <AssessmentRoundedIcon style={{ color: "#202020" }} />,
-    route: "/home/ue_questions",
+    route: "/home/ue",
   },
   {
     name: "Reports",

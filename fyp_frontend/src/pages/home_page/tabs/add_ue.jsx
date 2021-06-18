@@ -16,7 +16,7 @@ const tailLayout = {
   },
 };
 
-const Ue = () => {
+const AddUE = () => {
   const [form] = Form.useForm();
 
   const onFinish = (values) => {
@@ -81,4 +81,4 @@ const Ue = () => {
   );
 };
 
-export default Ue;
+export default AddUE;
