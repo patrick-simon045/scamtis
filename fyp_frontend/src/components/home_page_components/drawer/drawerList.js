@@ -18,19 +18,25 @@ export const drawerList = [
     name: "Score Tallying",
     icon: <CreateRoundedIcon style={{ color: "#202020" }} />,
     route: "/home/scorestab",
-  },  {
-    name: "University Exams",
+  },
+  {
+    name: "University Exams Questions Results",
+    icon: <CreateRoundedIcon style={{ color: "#202020" }} />,
+    route: "/home/ue_qn_results",
+  },
+    {
+    name: "University Exams Results",
     icon: <CreateRoundedIcon style={{ color: "#202020" }} />,
     route: "/home/ue",
+  },
+  {
+    name: "University Exams",
+    icon: <AssessmentRoundedIcon style={{ color: "#202020" }} />,
+    route: "/home/ue_questions",
   },
   {
     name: "Reports",
     icon: <AssessmentRoundedIcon style={{ color: "#202020" }} />,
     route: "/home/reportstab",
-  },
-  {
-    name: "Ue Report",
-    icon: <AssessmentRoundedIcon style={{ color: "#202020" }} />,
-    route: "/home/ue_questions",
   },
 ];
