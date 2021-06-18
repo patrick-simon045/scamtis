@@ -27,7 +27,7 @@ export const drawerList = [
     {
     name: "University Exams Results",
     icon: <CreateRoundedIcon style={{ color: "#202020" }} />,
-    route: "/home/ue",
+    route: "/home/ue_results",
   },
   {
     name: "University Exams",
