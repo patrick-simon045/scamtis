@@ -22,7 +22,9 @@ import HomeTab from "./tabs/home";
 import { loginUser } from "../../state/reduxStateSlices/login_pageSlice";
 import { getLecturerDetails } from "../../adapters/home_adapters/lecturer_details";
 import Ue from "./tabs/ue";
-import UeQuestions from "./tabs/ue_questions";
+import UeQuestions from "./tabs/ue_exams";
+import UEQuestionsResults from "./tabs/ue_questions_results";
+import UEQNResult from "./tabs/add_ue_qn_results";
 
 function Home() {
   const isLogged = useSelector((state) => state.login.isLoggedIn);
@@ -105,6 +107,16 @@ function Home() {
           <Switch>
             <Route exact path="/home/criteriatab" component={CriteriaTab} />
             <Route exact path="/home/ue" component={Ue} />
+            <Route
+              exact
+              path="/home/ue_qn_results"
+              component={UEQuestionsResults}
+            />
+            <Route
+              exact
+              path="/home/ue_qn_results/add"
+              component={UEQNResult}
+            />
             <Route exact path="/home/ue_questions" component={UeQuestions} />
             <Route exact path="/home/scorestab" component={ScoresTab} />
             <Route exact path="/home/reportstab" component={ReportsTab} />
