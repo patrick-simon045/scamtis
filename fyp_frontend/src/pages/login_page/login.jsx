@@ -7,7 +7,6 @@ import SignInButton from "../../components/login_page_components/signInButton";
 import ForgotPassword from "../../components/login_page_components/forgotPassword";
 import { useStyles } from "../../styles/material_styles";
 import { useDispatch } from "react-redux";
-import { getLecturerDetails } from "../../adapters/home_adapters/lecturer_details";
 
 function Login() {
   const history = useHistory();
@@ -22,7 +21,6 @@ function Login() {
         className={classes.form}
         onSubmit={() => {
           login_formik.formik.handleSubmit();
-          getLecturerDetails(dispatch);
         }}
       >
         <UsernameField login_formik={login_formik} />

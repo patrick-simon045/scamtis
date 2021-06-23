@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import Drawer from "@material-ui/core/Drawer";
 import AppBar from "@material-ui/core/AppBar";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -15,40 +15,23 @@ import MessageIcon from "../../components/home_page_components/appBar/messages";
 import NotificationIcon from "../../components/home_page_components/appBar/notifications";
 import UserAccountIcon from "../../components/home_page_components/appBar/userAccount";
 import { Route, useHistory } from "react-router-dom";
-import CriteriaTab from "./tabs/criteria";
+import CriteriaTab from "./tabs/criteria/criteria";
 import ScoresTab from "./tabs/scores";
 import ReportsTab from "./tabs/reports";
 import HomeTab from "./tabs/home";
 import { loginUser } from "../../state/reduxStateSlices/login_pageSlice";
-import { getLecturerDetails } from "../../adapters/home_adapters/lecturer_details";
+import { AddCriteria } from "./tabs/criteria/addCriteria";
 
 function Home() {
-  const isLogged = useSelector((state) => state.login.isLoggedIn);
-
+  console.log("we are home");
   const dispatch = useDispatch();
+
+  const isLogged = useSelector((state) => state.login.isLoggedIn);
+  const lecturerName = useSelector((state) => state.lecturer.lecturer_name);
+  console.log(lecturerName);
+
   const classes = useStyles();
   const history = useHistory();
-
-  useEffect(() => {
-    console.log("we begin here");
-    console.log("getting lecturer details ad updating the store");
-    const response = getLecturerDetails(dispatch);
-    console.log(response);
-  }, []);
-
-  // useEffect(() => {
-  //   console.log(lectureDetails);
-  // }, [lectureDetails]);
-
-  const [anchorEl, setAnchorEl] = React.useState(null);
-
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
 
   return (
     <div className={classes.root}>
@@ -100,6 +83,11 @@ function Home() {
           </div>
         </Drawer>
         <main className={classes.content}>
+          <Route
+            exact
+            path="/home/criteriatab/addcriteria"
+            component={AddCriteria}
+          />
           <Route exact path="/home/criteriatab" component={CriteriaTab} />
           <Route exact path="/home/scorestab" component={ScoresTab} />
           <Route exact path="/home/reportstab" component={ReportsTab} />

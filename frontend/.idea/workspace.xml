@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="55019cc2-a0cb-4c17-bb24-2a394685f410" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/src/modules/home/home.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/modules/home/home.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/modules/home/pages/criteria.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/modules/home/pages/criteria.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../fyp_frontend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/../fyp_frontend/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../fyp_frontend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/../fyp_frontend/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../fyp_frontend/src/adapters/home_adapters/lecturer_details.js" beforeDir="false" afterPath="$PROJECT_DIR$/../fyp_frontend/src/adapters/home_adapters/lecturer_details.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../fyp_frontend/src/adapters/login_adapters/login_form_validation.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../fyp_frontend/src/adapters/login_adapters/login_form_validation.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../fyp_frontend/src/adapters/login_adapters/login_user.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../fyp_frontend/src/adapters/login_adapters/login_user.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../fyp_frontend/src/components/home_page_components/appBar/userAccount.js" beforeDir="false" afterPath="$PROJECT_DIR$/../fyp_frontend/src/components/home_page_components/appBar/userAccount.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../fyp_frontend/src/global.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../fyp_frontend/src/global.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../fyp_frontend/src/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/../fyp_frontend/src/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../fyp_frontend/src/pages/home_page/home.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../fyp_frontend/src/pages/home_page/home.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../fyp_frontend/src/pages/home_page/tabs/criteria.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../fyp_frontend/src/pages/home_page/tabs/home.js" beforeDir="false" afterPath="$PROJECT_DIR$/../fyp_frontend/src/pages/home_page/tabs/home.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../fyp_frontend/src/pages/login_page/login.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../fyp_frontend/src/pages/login_page/login.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../fyp_frontend/src/state/reduxStateSlices/lecturer_detailsSlice.js" beforeDir="false" afterPath="$PROJECT_DIR$/../fyp_frontend/src/state/reduxStateSlices/lecturer_detailsSlice.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../fyp_frontend/src/state/reduxStore/store.js" beforeDir="false" afterPath="$PROJECT_DIR$/../fyp_frontend/src/state/reduxStore/store.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../fyp_frontend/src/styles/material_styles.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../fyp_frontend/src/styles/material_styles.jsx" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="ProjectId" id="1uLJmETo1SQyIq0Dikx9SMSoB2a" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="nodejs_package_manager_path" value="npm" />
+    <property name="vue.rearranger.settings.migration" value="true" />
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="55019cc2-a0cb-4c17-bb24-2a394685f410" name="Changes" comment="" />
+      <created>1624439093814</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1624439093814</updated>
+      <workItem from="1624439098939" duration="225000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>

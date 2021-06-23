@@ -4,6 +4,7 @@ export const urls = {
   baseUrl: baseUrl,
   loginUrl: baseUrl + "token_auth/",
   lectureDetailsUrl: baseUrl + "api/lecturers/",
+  assessmentCriteria: baseUrl + "api/ca_items/",
 };
 
 export const headers = {
@@ -18,4 +19,12 @@ export const headers = {
       Authorization: sessionStorage.getItem("token"),
     },
   },
+};
+
+export const lecturerInitialDetails = {
+  user_name: "nonem",
+  lecturer_name: "nonem",
+  courses_teaching: [],
+  course_count: 0,
+  position: "nonem",
 };

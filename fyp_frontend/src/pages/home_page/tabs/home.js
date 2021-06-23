@@ -1,6 +1,8 @@
 import { useSelector } from "react-redux";
 
 function HomeTab() {
+  console.log("we are home");
+
   const lectureDetails = useSelector((state) => {
     const stateVariable = state.lecturer;
     return {
@@ -11,15 +13,9 @@ function HomeTab() {
       position: stateVariable.position,
     };
   });
+
   return (
     <div>
-      {/* <h1>username: {lectureDetails.user_name}</h1>
-      <h1>lecturer_name: {lectureDetails.lecturer_name}</h1>
-      {lectureDetails.courses_teaching.map((course, index) => {
-        return <h1 key={index}>{course.course_code}</h1>;
-      })}
-      <h1>course_count: {lectureDetails.course_count}</h1>
-      <h1>position: {lectureDetails.position}</h1> */}
       <h5>Home</h5>
       {/* welcome message */}
       <p style={{ fontWeight: "600" }}>

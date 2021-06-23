@@ -1,11 +1,10 @@
-import React, { useState, useEffect, useLayoutEffect } from "react";
+import React, { useState, useLayoutEffect } from "react";
 import IconButton from "@material-ui/core/IconButton";
 import { useHistory } from "react-router-dom";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import { useStyles } from "../../../styles/material_styles";
-import { useSelector, useDispatch } from "react-redux";
-import { setLecturerDetails } from "../../../state/reduxStateSlices/lecturer_detailsSlice";
+import { useSelector } from "react-redux";
 import Popover from "@material-ui/core/Popover";
 import Typography from "@material-ui/core/Typography";
 
@@ -14,8 +13,6 @@ export default function UserAccountIcon() {
   const history = useHistory();
   const classes = useStyles();
   const [name_acronym, setNameAcronym] = useState("");
-
-  const dispatch = useDispatch();
 
   const lectureDetails = useSelector((state) => {
     const stateVariable = state.lecturer;
@@ -28,12 +25,7 @@ export default function UserAccountIcon() {
     };
   });
 
-  // useLayoutEffect(() => {
-  //   location.reload();
-  // }, []);
-
   useLayoutEffect(() => {
-    // location.reload();
     // extracting the first letter in each word
     let acronym = lectureDetails.lecturer_name
       .split(/\s/)
@@ -80,12 +72,6 @@ export default function UserAccountIcon() {
         }}
       >
         <div className={classes.popover}>
-          {/* <div className={classes.image_plus_name}></div> */}
-          {/* <img
-            className={classes.image}
-            src="https://images.pexels.com/photos/1789968/pexels-photo-1789968.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
-            alt="Paris"
-          /> */}
           <Avatar className={classes.image}>{name_acronym}</Avatar>
           <Typography className={classes.typography}>
             {lectureDetails.lecturer_name}
@@ -94,7 +80,6 @@ export default function UserAccountIcon() {
             {lectureDetails.position}
           </Typography>
           <Typography className={classes.typography}>
-            {/* courses: {lectureDetails.user_name} */}
             {(function (courses = lectureDetails.courses_teaching) {
               // extracting course list
               var list = [];
@@ -114,17 +99,7 @@ export default function UserAccountIcon() {
               style={{ textTransform: "none" }}
               onClick={() => {
                 console.log("Logout option tapped");
-                dispatch(
-                  setLecturerDetails({
-                    user_name: "",
-                    lecturer_name: "",
-                    courses_teaching: [],
-                    course_count: 0,
-                    position: "",
-                  })
-                );
-                sessionStorage.removeItem("token");
-                console.log(sessionStorage.getItem("token"));
+                localStorage.removeItem("token");
                 handleClose();
                 history.replace("/");
               }}

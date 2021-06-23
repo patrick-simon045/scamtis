@@ -1,9 +1,8 @@
 import axios from "axios";
 import { urls, headers } from "../../global";
-import { setToken } from "../../state/reduxStateSlices/tokenSlice";
-import { setLecturerDetails } from "../../state/reduxStateSlices/lecturer_detailsSlice";
+import { getLecturer_details } from "../../state/reduxStateSlices/lecturer_detailsSlice";
 
-export function login_user(userData, dispatch) {
+export function login_user(userData, dispatch, history) {
   axios
     .post(urls.loginUrl, userData, headers.headersWithoutToken)
     .then((response) => {
@@ -12,15 +11,18 @@ export function login_user(userData, dispatch) {
       var tokenString = "Token " + response.data.token;
       sessionStorage.setItem("token", tokenString);
       console.log(sessionStorage.getItem("token"));
-      dispatch(setLecturerDetails());
-
-      // axios
-      //   .get(urls.lectureDetailsUrl, headers.headersWithToken)
-      //   .then((response) => {
-      //     console.log(response.data);
-      //     dispatch(setLecturerDetails(response.data));
-      //   })
-      //   .catch((error) => console.log("an error has occured"));
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Token " + response.data.token,
+        },
+      };
+      dispatch(
+        getLecturer_details({
+          url: urls.lectureDetailsUrl,
+          header: config,
+        })
+      );
     })
     .catch((error) => console.log("an error has occured"));
 }
