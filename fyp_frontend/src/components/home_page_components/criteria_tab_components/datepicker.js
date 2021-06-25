@@ -5,8 +5,8 @@ import {
   KeyboardDatePicker,
 } from "@material-ui/pickers";
 
-export function DatePickerWidget() {
-  const [selectedDate, setSelectedDate] = React.useState();
+export function DatePickerWidget({ date_taken }) {
+  const [selectedDate, setSelectedDate] = React.useState(date_taken);
   const handleDateChange = (date) => {
     const day = date.getDate();
     const month = date.getMonth() + 1;

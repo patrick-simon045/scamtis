@@ -1,14 +1,15 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useDispatch } from "react";
 import InputLabel from "@material-ui/core/InputLabel";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import axios from "axios";
 import { headers, urls } from "../../../global";
+// import { setCriteria } from "../../../state/reduxStateSlices/assessmentsDetailsSlice";
 
-export function CriteriaSelect() {
-  const [age, setAge] = React.useState("");
+export function CriteriaSelect({ criteria }) {
   const [ca_items, setCa_items] = React.useState([]);
+  const [selectedCriteria, setSelectedCriteria] = React.useState(criteria);
 
   useEffect(() => {
     axios
@@ -23,9 +24,8 @@ export function CriteriaSelect() {
       .catch((error) => console.log("an error has occurred"));
   }, []);
 
-  console.log(ca_items);
   const handleSelectChange = (event) => {
-    setAge(event.target.value);
+    setSelectedCriteria(event.target.value);
   };
 
   return (
@@ -39,7 +39,7 @@ export function CriteriaSelect() {
       <Select
         labelId="demo-simple-select-outlined-label"
         id="demo-simple-select-outlined"
-        value={age}
+        value={selectedCriteria}
         onChange={handleSelectChange}
       >
         {ca_items.map((criteria, index) => {

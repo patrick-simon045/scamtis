@@ -1,6 +1,8 @@
 import axios from "axios";
 import { urls, headers } from "../../global";
+import { getAssessmentDetails } from "../../state/reduxStateSlices/assessment_detailsSlice";
 import { getLecturer_details } from "../../state/reduxStateSlices/lecturer_detailsSlice";
+import { batch } from "react-redux";
 
 export function login_user(userData, dispatch, history) {
   axios
@@ -17,12 +19,20 @@ export function login_user(userData, dispatch, history) {
           Authorization: "Token " + response.data.token,
         },
       };
-      dispatch(
-        getLecturer_details({
-          url: urls.lectureDetailsUrl,
-          header: config,
-        })
-      );
+      batch(() => {
+        dispatch(
+          getLecturer_details({
+            url: urls.lectureDetailsUrl,
+            header: config,
+          })
+        );
+        dispatch(
+          getAssessmentDetails({
+            url: urls.assessmentDetails,
+            header: config,
+          })
+        );
+      });
     })
     .catch((error) => console.log("an error has occured"));
 }

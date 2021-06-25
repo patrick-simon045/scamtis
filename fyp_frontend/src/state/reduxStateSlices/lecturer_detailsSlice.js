@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import { lecturerInitialDetails } from "../../global";
+import { sliceInitialDetails } from "../../global";
 
 export const getLecturer_details = createAsyncThunk(
   "lecturer/lecturerDetails",
@@ -16,11 +16,11 @@ export const getLecturer_details = createAsyncThunk(
 const lectureDetailsSlice = createSlice({
   name: "lecturer",
   initialState: {
-    user_name: lecturerInitialDetails.user_name,
-    lecturer_name: lecturerInitialDetails.lecturer_name,
-    courses_teaching: lecturerInitialDetails.courses_teaching,
-    course_count: lecturerInitialDetails.course_count,
-    position: lecturerInitialDetails.position,
+    user_name: sliceInitialDetails.lectureDetailsSlice.user_name,
+    lecturer_name: sliceInitialDetails.lectureDetailsSlice.lecturer_name,
+    courses_teaching: sliceInitialDetails.lectureDetailsSlice.courses_teaching,
+    course_count: sliceInitialDetails.lectureDetailsSlice.course_count,
+    position: sliceInitialDetails.lectureDetailsSlice.position,
   },
   reducers: {
     setDefaultLecturerDetails: (state, action) => {

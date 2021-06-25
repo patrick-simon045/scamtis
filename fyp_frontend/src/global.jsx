@@ -5,6 +5,7 @@ export const urls = {
   loginUrl: baseUrl + "token_auth/",
   lectureDetailsUrl: baseUrl + "api/lecturers/",
   assessmentCriteria: baseUrl + "api/ca_items/",
+  assessmentDetails: baseUrl + "api/assessments/",
 };
 
 export const headers = {
@@ -21,10 +22,32 @@ export const headers = {
   },
 };
 
-export const lecturerInitialDetails = {
-  user_name: "nonem",
-  lecturer_name: "nonem",
-  courses_teaching: [],
-  course_count: 0,
-  position: "nonem",
+let EMPTY_STRING = "";
+let UNKWOWN_STRING = "unknown";
+let UNKWOWN_NUMBER = 0;
+let UNKWOWN_ARRAY = [];
+
+export const sliceInitialDetails = {
+  lectureDetailsSlice: {
+    user_name: UNKWOWN_STRING,
+    lecturer_name: UNKWOWN_STRING,
+    courses_teaching: UNKWOWN_ARRAY,
+    course_count: UNKWOWN_NUMBER,
+    position: UNKWOWN_STRING,
+  },
+  assessmentsDetailsSlice: {
+    id: UNKWOWN_NUMBER,
+    criteria: UNKWOWN_STRING,
+    course: UNKWOWN_STRING,
+    academic_year: UNKWOWN_STRING,
+    date_taken: UNKWOWN_STRING,
+    number_of_questions: UNKWOWN_NUMBER,
+    contribution: UNKWOWN_NUMBER,
+  },
+  assessmentChangeSlice: {
+    criteria: EMPTY_STRING,
+    questions: UNKWOWN_NUMBER,
+    ca_weight: UNKWOWN_NUMBER,
+    date: EMPTY_STRING,
+  },
 };

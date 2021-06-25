@@ -107,6 +107,19 @@ def lecturer_details(request):
 
     return Response("Nothing to show")
 
+#
+#
+# end lecturer api
+#
+#
+
+
+#
+#
+# assessment details api
+#
+#
+
 
 @api_view(["GET", "POST"])
 @permission_classes([IsAuthenticated])
@@ -162,7 +175,7 @@ def assessment_details_update_delete(request, pk):
 
 #
 #
-# end lecturer api
+# end assessment details api
 #
 #
 
