@@ -18,7 +18,6 @@ function App() {
         <Switch>
           <Route path="/home" component={Home} />
           <Route path="/" component={returnLogin} />
-          {/* <Route path="/" component={Home} /> */}
         </Switch>
       </Router>
     </div>

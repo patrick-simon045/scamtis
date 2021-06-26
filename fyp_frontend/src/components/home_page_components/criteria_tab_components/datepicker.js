@@ -5,7 +5,7 @@ import {
   KeyboardDatePicker,
 } from "@material-ui/pickers";
 
-export function DatePickerWidget({ date_taken }) {
+export function DatePickerWidget({ date_taken, disabled }) {
   const [selectedDate, setSelectedDate] = React.useState(date_taken);
   const handleDateChange = (date) => {
     const day = date.getDate();
@@ -26,6 +26,7 @@ export function DatePickerWidget({ date_taken }) {
         label="Date of assessment"
         value={selectedDate}
         onChange={handleDateChange}
+        disabled={disabled === true ? true : false}
         KeyboardButtonProps={{
           "aria-label": "change date",
         }}

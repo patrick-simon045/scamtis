@@ -1,7 +1,7 @@
 import React from "react";
 import TextField from "@material-ui/core/TextField";
 
-export function QuestionsField({ number_of_questions }) {
+export function QuestionsField({ number_of_questions, disabled, width }) {
   return (
     <TextField
       InputProps={{ inputProps: { min: 0, max: 10 } }}
@@ -10,7 +10,8 @@ export function QuestionsField({ number_of_questions }) {
       type="number"
       defaultValue={number_of_questions}
       variant="outlined"
-      style={{ width: "100px" }}
+      style={{ width: width === null ? "100px" : width }}
+      disabled={disabled === true ? true : false}
       onClick={() => console.log("number field")}
     />
   );

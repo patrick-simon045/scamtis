@@ -6,6 +6,7 @@ export const urls = {
   lectureDetailsUrl: baseUrl + "api/lecturers/",
   assessmentCriteria: baseUrl + "api/ca_items/",
   assessmentDetails: baseUrl + "api/assessments/",
+  assessmentDelete: baseUrl + "api/assessments_change/",
 };
 
 export const headers = {

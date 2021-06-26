@@ -1,4 +1,4 @@
-import React, { useEffect, useDispatch } from "react";
+import React, { useEffect } from "react";
 import InputLabel from "@material-ui/core/InputLabel";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
@@ -7,22 +7,8 @@ import axios from "axios";
 import { headers, urls } from "../../../global";
 // import { setCriteria } from "../../../state/reduxStateSlices/assessmentsDetailsSlice";
 
-export function CriteriaSelect({ criteria }) {
-  const [ca_items, setCa_items] = React.useState([]);
+export function CriteriaSelect({ ca_items, criteria, ref, disabled }) {
   const [selectedCriteria, setSelectedCriteria] = React.useState(criteria);
-
-  useEffect(() => {
-    axios
-      .get(urls.assessmentCriteria, headers.headersWithToken)
-      .then((response) => {
-        console.log(response.data);
-        const data = response.data.map((criteria) => {
-          return criteria.ca_item_name;
-        });
-        setCa_items(data);
-      })
-      .catch((error) => console.log("an error has occurred"));
-  }, []);
 
   const handleSelectChange = (event) => {
     setSelectedCriteria(event.target.value);
@@ -41,6 +27,8 @@ export function CriteriaSelect({ criteria }) {
         id="demo-simple-select-outlined"
         value={selectedCriteria}
         onChange={handleSelectChange}
+        ref={ref}
+        disabled={disabled === true ? true : false}
       >
         {ca_items.map((criteria, index) => {
           return (

@@ -4,7 +4,7 @@ import { Button } from "@material-ui/core";
 export function RemoveButton({ onClick }) {
   return (
     <Button
-      variant="outlined"
+      variant="contained"
       color="secondary"
       style={{ textTransform: "none" }}
       onClick={onClick}

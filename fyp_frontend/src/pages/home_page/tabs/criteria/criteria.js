@@ -1,5 +1,5 @@
-import React from "react";
-import { useSelector } from "react-redux";
+import React, { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { useTheme } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Tabs from "@material-ui/core/Tabs";
@@ -12,6 +12,10 @@ import { CriteriaSelect } from "../../../../components/home_page_components/crit
 import { UpdateButton } from "../../../../components/home_page_components/criteria_tab_components/updatebutton";
 import { RemoveButton } from "../../../../components/home_page_components/criteria_tab_components/removebutton";
 import { AddCriteriaButton } from "../../../../components/home_page_components/criteria_tab_components/addCriteriaButton";
+import axios from "axios";
+import { headers, urls } from "../../../../global";
+import { getAssessmentDetails } from "../../../../state/reduxStateSlices/assessment_detailsSlice";
+import { useEffect } from "react";
 
 function CriteriaTab() {
   const classes = useStyles();
@@ -94,12 +98,47 @@ function CriteriaTab() {
 export default CriteriaTab;
 
 function AssessmentsComponent({ courses, course_assessmentList, value }) {
+  let criteria_select_ref = React.createRef();
+
+  const dispatch = useDispatch();
+
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Token b44466c5c0a9abdeff71c0979e5e9d4a0337ba8c",
+    },
+  };
+
+  useEffect(() => {
+    dispatch(
+      getAssessmentDetails({
+        url: urls.assessmentDetails,
+        header: config,
+      })
+    );
+  }, []);
+
+  const [ca_items, setCa_items] = React.useState([]);
+
+  useEffect(() => {
+    axios
+      .get(urls.assessmentCriteria, headers.headersWithToken)
+      .then((response) => {
+        console.log(response.data);
+        const data = response.data.map((criteria) => {
+          return criteria.ca_item_name;
+        });
+        setCa_items(data);
+      })
+      .catch((error) => console.log("an error has occurred"));
+  }, []);
+
   return (
     <>
       {courses.map((course, index) => {
         console.log(index);
-        return course_assessmentList[index].map(
-          (assessment, assessment_index) => {
+        return course_assessmentList[index].length !== 0 ? (
+          course_assessmentList[index].map((assessment, assessment_index) => {
             console.log(index);
             console.log(course_assessmentList[index]);
             return (
@@ -118,36 +157,63 @@ function AssessmentsComponent({ courses, course_assessmentList, value }) {
                       "10px 10px 20px rgba(255, 255, 255, 0.5), 10px 10px 20px rgba(20, 10, 0, 0.2)",
                   }}
                 >
-                  <CriteriaSelect criteria={assessment.criteria} />
+                  <CriteriaSelect
+                    criteria={assessment.criteria}
+                    disabled={true}
+                    ca_items={ca_items}
+                  />
                   <QuestionsField
                     number_of_questions={assessment.number_of_questions}
+                    disabled={true}
                   />
-                  <CaWeightField contribution={assessment.contribution} />
-                  <DatePickerWidget date_taken={assessment.date_taken} />
-                  <UpdateButton
-                    onClick={() => {
-                      console.log(
-                        "update button " +
-                          (assessment_index + 1) +
-                          " is clicked"
-                      );
-                    }}
+                  <CaWeightField
+                    contribution={assessment.contribution}
+                    disabled={true}
+                  />
+                  <DatePickerWidget
+                    date_taken={assessment.date_taken}
+                    disabled={true}
                   />
                   <RemoveButton
-                    onClick={() => {
-                      console.log(
-                        "remove button " +
-                          (assessment_index + 1) +
-                          " is clicked"
+                    onClick={async () => {
+                      console.log({
+                        primaryKey: assessment.id,
+                        selectedCriteria: assessment.criteria,
+                        questions: assessment.number_of_questions,
+                        weight: assessment.contribution,
+                        date: assessment.date_taken,
+                      });
+                      deleteAssessment(assessment, config);
+                      await dispatch(
+                        getAssessmentDetails({
+                          url: urls.assessmentDetails,
+                          header: config,
+                        })
                       );
+                      window.location.reload();
                     }}
                   />
                 </div>
               </div>
             );
-          }
+          })
+        ) : (
+          <h2>There is nothing to show</h2>
         );
       })}
     </>
   );
+}
+
+function deleteAssessment(assessment, config) {
+  fetch(urls.assessmentDelete + assessment.id, {
+    method: "DELETE",
+    headers: config.headers,
+  })
+    .then((response) => response.json())
+    .then((json_response) => console.log(json_response))
+    .catch((error) => {
+      console.log("an error has occurred");
+      console.log("the error is: " + error);
+    });
 }

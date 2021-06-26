@@ -12,6 +12,7 @@ export function login_user(userData, dispatch, history) {
       console.log("Token " + response.data.token);
       var tokenString = "Token " + response.data.token;
       sessionStorage.setItem("token", tokenString);
+      localStorage.setItem("token", tokenString);
       console.log(sessionStorage.getItem("token"));
       const config = {
         headers: {
@@ -26,12 +27,12 @@ export function login_user(userData, dispatch, history) {
             header: config,
           })
         );
-        dispatch(
-          getAssessmentDetails({
-            url: urls.assessmentDetails,
-            header: config,
-          })
-        );
+        // dispatch(
+        //   getAssessmentDetails({
+        //     url: urls.assessmentDetails,
+        //     header: config,
+        //   })
+        // );
       });
     })
     .catch((error) => console.log("an error has occured"));
