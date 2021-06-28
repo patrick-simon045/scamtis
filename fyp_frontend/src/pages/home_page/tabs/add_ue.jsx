@@ -1,4 +1,7 @@
-import { Form, Input, Button, Select, Typography } from "antd";
+import { Form, Button, Select, Typography } from "antd";
+import axios from "axios";
+import { Redirect } from "react-router-dom";
+
 const { Option } = Select;
 const layout = {
   labelCol: {
@@ -20,7 +23,24 @@ const AddUE = () => {
   const [form] = Form.useForm();
 
   const onFinish = (values) => {
-    console.log(values);
+    const options = {
+      headers: {
+        Accept: "text/plain,*/*",
+        "Content-Type": "application/json",
+      },
+    };
+    const url = "http://127.0.0.1:8000/api/add-ue/";
+    const data = JSON.stringify(values);
+    axios.post(url, data, options).then(
+      (response) => {
+        console.log(response);
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+    console.log(JSON.stringify(values));
+    return <Redirect to="/home/ue" />;
   };
 
   return (
@@ -28,7 +48,26 @@ const AddUE = () => {
       <Typography>Add University Exam</Typography>
 
       <Form.Item
-        name="examtype"
+        name="academic_year"
+        label="Academic Year"
+        rules={[
+          {
+            required: true,
+          },
+        ]}
+      >
+        <Select placeholder="academic year" allowClear>
+          <option value="2020/2021">2020/2021</option>
+          {/* <option value="2021/2022">2021/2022</option>
+          <option value="2022/2023">2022/2023</option>
+          <option value="2023/2024">2023/2024</option>
+          <option value="2024/2025">2024/2025</option>
+          <option value="2025/2026">2025/2026</option> */}
+        </Select>
+      </Form.Item>
+
+      <Form.Item
+        name="exam_type"
         label="Exam Type"
         rules={[
           {
@@ -44,8 +83,31 @@ const AddUE = () => {
           <Option value="-----">-----</Option>
           <Option value="supplimentary">supplimentary</Option>
           <Option value="special">special</Option>
-          <Option value="ue">ue</Option>
+          <Option value="UE">UE</Option>
         </Select>
+      </Form.Item>
+
+      <Form.Item
+        name="date_taken"
+        label="Date Time"
+        rules={[
+          {
+            required: true,
+          },
+        ]}
+      >
+        <input type="datetime-local" />
+      </Form.Item>
+      <Form.Item
+        name="number_of_questions"
+        label="number of questions"
+        rules={[
+          {
+            required: true,
+          },
+        ]}
+      >
+        <input type="number" />
       </Form.Item>
       <Form.Item
         name="course"
@@ -58,20 +120,10 @@ const AddUE = () => {
       >
         <Select placeholder="course" allowClear>
           <Option value="-----">-----</Option>
-          <Option value="cs451">Cs451</Option>
+          <Option value="cs 451">cs 451</Option>
         </Select>
       </Form.Item>
-      <Form.Item
-        name="academicYear"
-        label="Academic Year"
-        rules={[
-          {
-            required: true,
-          },
-        ]}
-      >
-        <Input />
-      </Form.Item>
+
       <Form.Item {...tailLayout}>
         <Button type="primary" htmlType="submit">
           Submit
