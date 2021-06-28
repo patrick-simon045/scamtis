@@ -14,6 +14,9 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework import authentication
 from rest_framework.authtoken.models import Token
 from .models import *
+# lau imports
+from rest_framework import generics
+from . import serializers
 
 
 class ResultsViewset(viewsets.ModelViewSet):
@@ -261,3 +264,9 @@ def export_users_xls(request):
     context = {}
 
     return render(request, 'backendapi/excel_home.html', context)
+
+
+# lau views
+class UEListCreateView(generics.ListCreateAPIView):
+    queryset = UE.objects.all()
+    serializer_class = serializers.UESerializer
