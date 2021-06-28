@@ -123,6 +123,9 @@ class Program_Course(models.Model):
     academic_year = models.CharField(
         max_length=9, choices=ACADEMIC_YEAR, default='a')
 
+    def __str__(self):
+        return "programme: {} -> course: {}".format(self.program, self.course)
+
     class Meta:
         unique_together = ['course', 'program', 'academic_year',
                            'semester', 'course_type', 'year_of_study']
@@ -211,6 +214,22 @@ class Assessment(models.Model):
         unique_together = ['course', 'criteria']
 
 
+@receiver(post_save, sender=Assessment)
+def create_results_table(sender, created=False, **kwargs):
+    if created:
+        print("here we go")
+        course = kwargs.get('instance').course
+        programs = Program_Course.objects.filter(course=course)
+        for program in programs:
+            students = Student.objects.filter(program=program.program)
+            for student in students:
+                print("course: {} programme: {} stduent: {}".format(
+                    course, program, student))
+                a = Assessment_Results.objects.create(
+                    assessment=kwargs.get('instance'), student=student)
+                print(a)
+
+
 class Assessment_Results(models.Model):
     # ACADEMIC_YEAR = (
     #     ('a', '2020/2021'),
@@ -226,7 +245,7 @@ class Assessment_Results(models.Model):
     student = models.ForeignKey(
         'Student', related_name='assessment_result', on_delete=models.CASCADE)
     score = models.IntegerField(
-        validators=[MaxValueValidator(100), MinValueValidator(0)])
+        validators=[MaxValueValidator(100), MinValueValidator(0)], default=0)
 
     # academic_year = models.CharField(max_length=9, choices=ACADEMIC_YEAR, default='a')
 
