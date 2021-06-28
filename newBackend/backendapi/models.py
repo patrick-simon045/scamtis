@@ -18,14 +18,13 @@ class Role(models.Model):
 class Course(models.Model):
 
     CREDITS = (
-        ("12", 12), ("8", 8)
+        (12, 12), (8, 8),(16,16)
     )
 
     course_code = models.CharField(max_length=50, primary_key=True)
     course_name = models.CharField(max_length=50)
     program = models.ManyToManyField("Program", through='Program_Course')
-    credits = models.IntegerField(default=12, validators=[
-                                  MaxValueValidator(16), MinValueValidator(8)])
+    credits = models.IntegerField(default=12,choices=CREDITS)
 
     def __str__(self):
         return self.course_code
@@ -108,6 +107,8 @@ class Program_Course(models.Model):
         ('1', '1'), ('2', '2'), ('3', '3'), ('4', '4'), ('5', '5')
     )
 
+	
+
     course = models.ForeignKey(
         'Course', on_delete=models.CASCADE)
     program = models.ForeignKey(
@@ -122,6 +123,7 @@ class Program_Course(models.Model):
         max_length=1, choices=YEARS_OF_STUDY, default='1')
     academic_year = models.CharField(
         max_length=9, choices=ACADEMIC_YEAR, default='a')
+    mandatory = models.BooleanField()
 
     class Meta:
         unique_together = ['course', 'program', 'academic_year',
@@ -265,33 +267,49 @@ class Assessment_Results(models.Model):
 
 
 class UE(models.Model):
-    exam_type = models.CharField(max_length=30)
+    ACADEMIC_YEAR = (
+        ('21', '2020/2021'),
+        ('22', '2021/2022'),
+        ('23', '2022/2023'),
+        ('24', '2023/2024'),
+        ('25', '2024/2025'),
+        ('26', '2025/2026'),
+    )
+    academic_year = models.CharField(
+        max_length=9, choices=ACADEMIC_YEAR, default='21')
+    venue = models.ManyToManyField('Venue', through='Course_Venue')
+    
+    exam_type_choices = (('sup', 'suplimentary'),
+                         ('special', 'special'), ('UE', 'UE'),)
+    exam_type = models.CharField(choices=exam_type_choices, max_length=30)
     course = models.ForeignKey(
         'Course', related_name='ue', on_delete=models.CASCADE)
-    academic_year = models.CharField(max_length=5)
-    date_taken = models.DateTimeField(verbose_name='Date', auto_now_add=True)
-    total_mark = models.IntegerField(verbose_name='Total marks',
-                                     validators=[MaxValueValidator(100), MinValueValidator(0)])
+    date_taken = models.DateTimeField(verbose_name='Date')
+
     number_of_questions = models.IntegerField(
         validators=[MinValueValidator(1)])
 
     def __str__(self):
-        return f'{self.criteria} {self.academic_year}'
-
-    def __str__(self):
-        return
-
-    def __unicode__(self):
-        return
+        return f'{self.exam_type} {self.course} {self.academic_year}'
 
     class Meta:
         unique_together = ['course', 'exam_type', 'academic_year',
-                           'date_taken', 'total_mark', 'number_of_questions']
-
-
-class UE_Results(models.Model):
+                           'date_taken', 'number_of_questions']
+        verbose_name = ("University Exam")
+        verbose_name_plural = ("University Exams")
+class UE_Questions_Results(models.Model):
+    ACADEMIC_YEAR = (
+        ('21', '2020/2021'),
+        ('22', '2021/2022'),
+        ('23', '2022/2023'),
+        ('24', '2023/2024'),
+        ('25', '2024/2025'),
+        ('26', '2025/2026'),
+    )
+    academic_year = models.CharField(
+        max_length=9, choices=ACADEMIC_YEAR, default='21')
     score = models.IntegerField(validators=[MaxValueValidator(100)])
-    total_score = models.IntegerField(validators=[MaxValueValidator(100)])
+    
     question_number = models.IntegerField(validators=[MinValueValidator(1)])
     student = models.ForeignKey(
         'Student', related_name='result', on_delete=models.CASCADE)
@@ -299,16 +317,34 @@ class UE_Results(models.Model):
         'UE', related_name='result', on_delete=models.CASCADE)
 
     def __str__(self):
-        return
-
-    def __unicode__(self):
-        return
+        return 'ue results'
 
     class Meta:
-        unique_together = ['score', 'total_score',
-                           'question_number', 'student', 'ue']
+        unique_together = ['score', 'question_number', 'student', 'ue']
+        verbose_name = ("University Exam Questions Result")
+        verbose_name_plural = ("University Exam Questions Results")
+class UE_Results(models.Model):
+    ACADEMIC_YEAR = (
+        ('21', '2020/2021'),
+        ('22', '2021/2022'),
+        ('23', '2022/2023'),
+        ('24', '2023/2024'),
+        ('25', '2024/2025'),
+        ('26', '2025/2026'),
+    )
+    academic_year = models.CharField(
+        max_length=9, choices=ACADEMIC_YEAR, default='21')
+    student = models.ForeignKey('Student', on_delete=models.CASCADE)
+    course = models.ForeignKey('Course', on_delete=models.CASCADE)
+    avarage_score = models.IntegerField()
 
+    class Meta:
+        unique_together = ['course', 'student']
+        verbose_name = ("University Exam Result")
+        verbose_name_plural = ("University Exam Results")
 
+    def __str__(self):
+        return f'{self.student} {self.avarage_score}'
 class Result(models.Model):
     name = models.CharField(default='question', max_length=10)
     first_question = models.PositiveSmallIntegerField(validators=[
@@ -382,3 +418,24 @@ class CA(models.Model):
 #
 #         # lecturer = Lecturer(lecturer=instance)
 #         # lecturer.save()
+class Venue(models.Model):
+    venue_name = models.CharField(max_length=30, primary_key=True)
+
+    def __str__(self):
+        return self.venue_name
+class Course_Venue(models.Model):
+    paper = models.ForeignKey('UE',  on_delete=models.CASCADE)
+    venue = models.ForeignKey('Venue', on_delete=models.CASCADE)
+    head_supervisor = models.ForeignKey('Lecturer',  on_delete=models.CASCADE)
+    da_te = models.DateTimeField()
+
+    class Meta:
+        unique_together = ['paper', 'venue']
+        verbose_name = ("Course Venue")
+        verbose_name_plural = ("Course Venue")
+
+    def __str__(self):
+        return
+
+    def __unicode__(self):
+        return

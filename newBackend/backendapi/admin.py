@@ -84,8 +84,17 @@ class Assessment_ResultsAdmin(admin.ModelAdmin):
 
 admin.site.register(Assessment_Results, Assessment_ResultsAdmin)
 
-admin.site.register(UE)
-admin.site.register(UE_Results)
+class UEAdmin(admin.ModelAdmin):
+    list_display = ( 'course', 'academic_year','date_taken')
+
+
+admin.site.register(UE, UEAdmin)
+class UE_ResultsAdmin(admin.ModelAdmin):
+    list_display = ( 'student', 'course','avarage_score')
+admin.site.register(UE_Results,UE_ResultsAdmin)
+class UE_Questions_ResultsAdmin(admin.ModelAdmin):
+    list_display = ( 'student', 'question_number','score','ue')
+admin.site.register(UE_Questions_Results,UE_Questions_ResultsAdmin)
 
 
 class CAAdmin(admin.ModelAdmin):
