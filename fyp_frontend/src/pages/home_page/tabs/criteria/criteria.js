@@ -26,8 +26,8 @@ function CriteriaTab() {
     setValue(newValue);
   };
 
-  const courses = useSelector((state) => state.lecturer.courses_teaching);
   const assessments = useSelector((state) => state.assessments.assessments);
+  const courses = useSelector((state) => state.lecturer.courses_teaching);
 
   const course_list = function () {
     const list = courses.map((course_item) => course_item.course_code);
@@ -100,12 +100,15 @@ export default CriteriaTab;
 function AssessmentsComponent({ courses, course_assessmentList, value }) {
   let criteria_select_ref = React.createRef();
 
+  const token = useSelector((state) => state.token.tokenString);
+  console.log("token from redux: " + token);
+
   const dispatch = useDispatch();
 
   const config = {
     headers: {
       "Content-Type": "application/json",
-      Authorization: "Token b44466c5c0a9abdeff71c0979e5e9d4a0337ba8c",
+      Authorization: token,
     },
   };
 
@@ -143,20 +146,7 @@ function AssessmentsComponent({ courses, course_assessmentList, value }) {
             console.log(course_assessmentList[index]);
             return (
               <div hidden={value !== index}>
-                <div
-                  style={{
-                    margin: "20px 0",
-                    width: "100%",
-                    display: "flex",
-                    justifyContent: "space-evenly",
-                    alignItems: "center",
-                    backgroundColor: "white",
-                    padding: "20px 10px",
-                    borderRadius: "10px",
-                    boxShadow:
-                      "10px 10px 20px rgba(255, 255, 255, 0.5), 10px 10px 20px rgba(20, 10, 0, 0.2)",
-                  }}
-                >
+                <div style={componentStyles.assessmentCard}>
                   <CriteriaSelect
                     criteria={assessment.criteria}
                     disabled={true}
@@ -217,3 +207,18 @@ function deleteAssessment(assessment, config) {
       console.log("the error is: " + error);
     });
 }
+
+const componentStyles = {
+  assessmentCard: {
+    margin: "20px 0",
+    width: "100%",
+    display: "flex",
+    justifyContent: "space-evenly",
+    alignItems: "center",
+    backgroundColor: "white",
+    padding: "20px 10px",
+    borderRadius: "10px",
+    boxShadow:
+      "10px 10px 20px rgba(255, 255, 255, 0.5), 10px 10px 20px rgba(20, 10, 0, 0.2)",
+  },
+};

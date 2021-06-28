@@ -10,7 +10,7 @@ import persistReducer from "redux-persist/es/persistReducer";
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: ["lecturer", "assessments"],
+  whitelist: ["lecturer", "assessments", "token"],
 };
 
 const combinedReducers = combineReducers({

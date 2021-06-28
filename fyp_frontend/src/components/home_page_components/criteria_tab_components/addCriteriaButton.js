@@ -13,11 +13,32 @@ import { Ca_WeightField } from "./ca_weightfield";
 import { DatePickerWidget } from "./datepicker";
 import axios from "axios";
 import { headers, urls } from "../../../global";
+import { AddCriteriaSelect } from "./addCriteriaSelect";
+import { AddQuestionsField } from "./addQuestionsField";
+import { AddContributionField } from "./addWeightField";
+import { AddDatePickerWidget } from "./addDatePicker";
+import { useSelector, useDispatch } from "react-redux";
+import { AddCourse } from "./addCourse";
+import { getAssessmentDetails } from "../../../state/reduxStateSlices/assessment_detailsSlice";
 
 export function AddCriteriaButton() {
   const [open, setOpen] = React.useState(false);
 
-  // const history = useHistory();
+  const [selectedCourse, setSelectedCourse] = React.useState("");
+  const [selectedCriteria, setSelectedCriteria] = React.useState("");
+  const [numberOfQuestions, setNumberOfQuestions] = React.useState(3);
+  const [contribution, setContribution] = React.useState(15);
+  const [selectedDate, setSelectedDate] = React.useState(new Date());
+
+  const dispatch = useDispatch();
+  const token = useSelector((state) => state.token.tokenString);
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: token,
+    },
+  };
+
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -29,20 +50,7 @@ export function AddCriteriaButton() {
   return (
     <div>
       <IconButton aria-label="add criteria" onClick={handleClickOpen}>
-        <div
-          style={{
-            backgroundColor: "white",
-            padding: 10,
-            borderRadius: "50%",
-            height: 80,
-            width: 80,
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            boxShadow:
-              "10px -10px 20px rgba(255, 255, 255, 0.3), -10px 10px 20px rgba(20, 10, 0, 0.1)",
-          }}
-        >
+        <div style={stylesObjects.iconButton}>
           <AddRoundedIcon />
         </div>
       </IconButton>
@@ -59,8 +67,18 @@ export function AddCriteriaButton() {
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            {/* <h1>Hey there</h1> */}
-            <PopUpItems />
+            <PopUpItems
+              selectedCourse={selectedCourse}
+              setSelectedCourse={setSelectedCourse}
+              selectedCriteria={selectedCriteria}
+              setSelectedCriteria={setSelectedCriteria}
+              numberOfQuestions={numberOfQuestions}
+              setNumberOfQuestions={setNumberOfQuestions}
+              contribution={contribution}
+              setContribution={setContribution}
+              selectedDate={selectedDate}
+              setSelectedDate={setSelectedDate}
+            />
           </DialogContentText>
         </DialogContent>
         <DialogActions>
@@ -68,8 +86,41 @@ export function AddCriteriaButton() {
             Cancel
           </Button>
           <Button
-            onClick={() => {
+            onClick={async () => {
               console.log("create button clicked");
+
+              const day = selectedDate.getDate();
+              const month = selectedDate.getMonth() + 1;
+              const year = selectedDate.getFullYear();
+              console.log("obtained date: " + day + "-" + month + "-" + year);
+              const dateString = day + "-" + month + "-" + year;
+
+              const academic_year = getAcademicYear(month, year);
+              const bodyData = {
+                course: selectedCourse,
+                criteria: selectedCriteria,
+                number_of_questions: numberOfQuestions,
+                contribution: contribution,
+                academic_year: academic_year,
+                date_taken: dateString,
+              };
+
+              console.log(bodyData);
+              addAssessment(config, bodyData);
+
+              await dispatch(
+                getAssessmentDetails({
+                  url: urls.getAssessmentDetails,
+                  header: config,
+                })
+              );
+              window.location.reload();
+
+              setSelectedCriteria("");
+              setNumberOfQuestions(3);
+              setContribution(15);
+              setSelectedDate(new Date("2014-08-18T21:11:54"));
+
               handleClose();
             }}
             variant="contained"
@@ -83,38 +134,97 @@ export function AddCriteriaButton() {
   );
 }
 
-function PopUpItems() {
-  const [ca_items, setCa_items] = React.useState([]);
-
-  useEffect(() => {
-    axios
-      .get(urls.assessmentCriteria, headers.headersWithToken)
-      .then((response) => {
-        console.log(response.data);
-        const data = response.data.map((criteria) => {
-          return criteria.ca_item_name;
-        });
-        setCa_items(data);
-      })
-      .catch((error) => console.log("an error has occurred"));
-  }, []);
+function PopUpItems({
+  selectedCriteria,
+  setSelectedCriteria,
+  numberOfQuestions,
+  setNumberOfQuestions,
+  contribution,
+  setContribution,
+  selectedDate,
+  setSelectedDate,
+  selectedCourse,
+  setSelectedCourse,
+}) {
   return (
-    <div
-      style={{
-        width: "100%",
-        display: "flex",
-        flexDirection: "row",
-        justifyContent: "space-evenly",
-        alignItems: "center",
-        backgroundColor: "whitesmoke",
-        padding: "20px 10px",
-        borderRadius: "10px",
-      }}
-    >
-      <CriteriaSelect ca_items={ca_items} />
-      <QuestionsField width={"200px"} />
-      <Ca_WeightField width={"200px"} />
-      <DatePickerWidget />
+    <div style={stylesObjects.popUpItemsCardStyle}>
+      <AddCourse
+        selectedCourse={selectedCourse}
+        setSelectedCourse={setSelectedCourse}
+      />
+      <AddCriteriaSelect
+        selectedCriteria={selectedCriteria}
+        setSelectedCriteria={setSelectedCriteria}
+      />
+      <AddQuestionsField
+        width={"200px"}
+        numberOfQuestions={numberOfQuestions}
+        setNumberOfQuestions={setNumberOfQuestions}
+      />
+      <AddContributionField
+        width={"200px"}
+        contribution={contribution}
+        setContribution={setContribution}
+      />
+      <AddDatePickerWidget
+        selectedDate={selectedDate}
+        setSelectedDate={setSelectedDate}
+      />
     </div>
   );
 }
+
+function getAcademicYear(month, year) {
+  let academic_year = "";
+
+  if (month >= 11) {
+    const end_year = year + 1;
+    const start_year = year;
+    academic_year = start_year + "/" + end_year;
+  } else {
+    const end_year = year;
+    const start_year = year - 1;
+    academic_year = start_year + "/" + end_year;
+  }
+
+  return academic_year;
+}
+
+function addAssessment(config, bodyData) {
+  fetch(urls.assessmentDetails, {
+    method: "POST",
+    headers: config.headers,
+    body: JSON.stringify(bodyData),
+  })
+    .then((response) => response.json())
+    .then((json_response) => console.log(json_response))
+    .catch((error) => {
+      console.log("an error has occurred");
+      console.log("the error is: " + error);
+    });
+}
+
+const stylesObjects = {
+  popUpItemsCardStyle: {
+    width: "100%",
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+    alignItems: "center",
+    backgroundColor: "whitesmoke",
+    padding: "20px 10px",
+    borderRadius: "10px",
+  },
+  iconButton: {
+    backgroundColor: "white",
+    padding: 10,
+    borderRadius: "50%",
+    height: 80,
+    width: 80,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    boxShadow:
+      "10px -10px 20px rgba(255, 255, 255, 0.3), -10px 10px 20px rgba(20, 10, 0, 0.1)",
+  },
+};

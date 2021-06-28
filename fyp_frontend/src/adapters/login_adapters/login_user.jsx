@@ -3,6 +3,7 @@ import { urls, headers } from "../../global";
 import { getAssessmentDetails } from "../../state/reduxStateSlices/assessment_detailsSlice";
 import { getLecturer_details } from "../../state/reduxStateSlices/lecturer_detailsSlice";
 import { batch } from "react-redux";
+import { setToken } from "../../state/reduxStateSlices/tokenSlice";
 
 export function login_user(userData, dispatch, history) {
   axios
@@ -27,12 +28,13 @@ export function login_user(userData, dispatch, history) {
             header: config,
           })
         );
-        // dispatch(
-        //   getAssessmentDetails({
-        //     url: urls.assessmentDetails,
-        //     header: config,
-        //   })
-        // );
+        dispatch(
+          getAssessmentDetails({
+            url: urls.assessmentDetails,
+            header: config,
+          })
+        );
+        dispatch(setToken(config.headers.Authorization));
       });
     })
     .catch((error) => console.log("an error has occured"));
