@@ -73,7 +73,7 @@ admin.site.register(CA_Item)
 # admin.site.register(Assessment)
 class AssessmentAdmin(admin.ModelAdmin):
     list_display = (
-        'course', 'criteria', 'contribution', 'academic_year', 'number_of_questions', 'date_taken')
+        'id', 'course', 'criteria', 'contribution', 'academic_year', 'number_of_questions', 'date_taken')
     list_filter = ('criteria', 'academic_year')
 
 
@@ -82,7 +82,7 @@ admin.site.register(Assessment, AssessmentAdmin)
 
 # admin.site.register(Assessment_Results)
 class Assessment_ResultsAdmin(admin.ModelAdmin):
-    list_display = ('assessment', 'student', 'semester',
+    list_display = ('id', 'assessment', 'student', 'semester',
                     'course_type', 'year_of_study', 'academic_year', 'score')
 
 

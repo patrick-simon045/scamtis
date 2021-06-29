@@ -68,14 +68,27 @@ function ScoresTab() {
             }}
             onEditCellChange={(cell) => {
               const record_id = cell.id;
-              const score_record = searchRow(cell.id, rows);
-              const new_score_value = Number(cell.props.value);
+              // const score_record = searchArray(record_id, rows);
+              const new_score = Number(cell.props.value);
 
-              console.log({
-                record_id: record_id,
-                score_record: score_record,
-                new_score_value: new_score_value,
-              });
+              let dataRecord = searchArray(record_id, data).record;
+              dataRecord.score = new_score;
+              console.log(dataRecord);
+
+              const url = urls.updateAssessmentResult + dataRecord.id;
+              const headers = config.headers;
+              const body = {
+                id: dataRecord.id,
+                assessment: dataRecord.assessment.id,
+                semester: dataRecord.semester,
+                course_type: dataRecord.course_type,
+                year_of_study: dataRecord.year_of_study,
+                academic_year: dataRecord.academic_year,
+                student: dataRecord.student,
+                score: dataRecord.score,
+              };
+              console.log({ url: url, headers: headers, body: body });
+              updateAssessmentResultRecord(url, headers, body);
             }}
           />
         </React.StrictMode>
@@ -98,13 +111,27 @@ const columns = [
   { field: "score", headerName: "SCORE", width: 200, editable: true },
 ];
 
-function searchRow(idValue, myArray) {
+function searchArray(idValue, myArray) {
   for (var i = 0; i < myArray.length; i++) {
     if (myArray[i].id === idValue) {
       // console.log(myArray[i]);
       return { record: myArray[i], index: i };
     }
   }
+}
+
+function updateAssessmentResultRecord(url, headers, body) {
+  fetch(url, {
+    method: "PUT",
+    headers: headers,
+    body: JSON.stringify(body),
+  })
+    .then((response) => response.json())
+    .then((json_response) => console.log(json_response))
+    .catch((error) => {
+      console.log("an error has occurred");
+      console.log("the error is: " + error);
+    });
 }
 
 const componentStyles = {
