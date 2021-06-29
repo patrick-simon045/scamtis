@@ -29,15 +29,7 @@ function ScoresTab() {
 
   useEffect(() => {
     console.log(sessionStorage.getItem("criteria_list_from_database"));
-    fetch(urls.getAssessmentResults, {
-      method: "GET",
-      headers: config.headers,
-    })
-      .then((response) => response.json())
-      .then((response) => {
-        console.log(response);
-        setData(response);
-      });
+    getAssessmentResults(urls.getAssessmentResults, config.headers, setData);
   }, []);
 
   useEffect(() => {
@@ -68,12 +60,10 @@ function ScoresTab() {
             }}
             onEditCellChange={(cell) => {
               const record_id = cell.id;
-              // const score_record = searchArray(record_id, rows);
               const new_score = Number(cell.props.value);
 
               let dataRecord = searchArray(record_id, data).record;
               dataRecord.score = new_score;
-              console.log(dataRecord);
 
               const url = urls.updateAssessmentResult + dataRecord.id;
               const headers = config.headers;
@@ -89,6 +79,7 @@ function ScoresTab() {
               };
               console.log({ url: url, headers: headers, body: body });
               updateAssessmentResultRecord(url, headers, body);
+              window.location.reload();
             }}
           />
         </React.StrictMode>
@@ -114,7 +105,6 @@ const columns = [
 function searchArray(idValue, myArray) {
   for (var i = 0; i < myArray.length; i++) {
     if (myArray[i].id === idValue) {
-      // console.log(myArray[i]);
       return { record: myArray[i], index: i };
     }
   }
@@ -128,6 +118,19 @@ function updateAssessmentResultRecord(url, headers, body) {
   })
     .then((response) => response.json())
     .then((json_response) => console.log(json_response))
+    .catch((error) => {
+      console.log("an error has occurred");
+      console.log("the error is: " + error);
+    });
+}
+
+function getAssessmentResults(url, headers, setData) {
+  fetch(url, {
+    method: "GET",
+    headers: headers,
+  })
+    .then((response) => response.json())
+    .then((json_response) => setData(json_response))
     .catch((error) => {
       console.log("an error has occurred");
       console.log("the error is: " + error);
