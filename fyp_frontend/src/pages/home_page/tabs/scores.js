@@ -29,7 +29,7 @@ function ScoresTab() {
 
   useEffect(() => {
     console.log(sessionStorage.getItem("criteria_list_from_database"));
-    fetch(urls.getResults, {
+    fetch(urls.getAssessmentResults, {
       method: "GET",
       headers: config.headers,
     })
@@ -42,18 +42,14 @@ function ScoresTab() {
 
   useEffect(() => {
     const rowData = data.map((data) => {
-      return {
+      let row_details = {
         id: data.id,
-        question1: data.first_question,
-        question2: data.second_question,
-        question3: data.third_question,
-        question4: data.fourth_question,
-        sum:
-          Number(data.first_question) +
-          Number(data.second_question) +
-          Number(data.third_question) +
-          Number(data.fourth_question),
+        student: data.student,
+        year_of_study: data.year_of_study,
+        semester: data.semester,
+        score: data.score,
       };
+      return row_details;
     });
     setRows(rowData);
   }, [data]);
@@ -71,70 +67,15 @@ function ScoresTab() {
               Toolbar: CustomToolbar,
             }}
             onEditCellChange={(cell) => {
-              console.log(cell.id);
-              const res = searchRow(cell.id, rows);
-              const value = Number(cell.props.value);
-              switch (cell.field) {
-                case "question1":
-                  rows[res.index].question1 = value;
-                  rows[res.index].sum =
-                    rows[res.index].question1 +
-                    rows[res.index].question2 +
-                    rows[res.index].question3 +
-                    rows[res.index].question4;
-                  break;
-                case "question2":
-                  rows[res.index].question2 = value;
-                  rows[res.index].sum =
-                    rows[res.index].question1 +
-                    rows[res.index].question2 +
-                    rows[res.index].question3 +
-                    rows[res.index].question4;
-                  break;
-                case "question3":
-                  rows[res.index].question3 = value;
-                  rows[res.index].sum =
-                    rows[res.index].question1 +
-                    rows[res.index].question2 +
-                    rows[res.index].question3 +
-                    rows[res.index].question4;
-                  break;
-                case "question4":
-                  rows[res.index].question4 = value;
-                  rows[res.index].sum =
-                    rows[res.index].question1 +
-                    rows[res.index].question2 +
-                    rows[res.index].question3 +
-                    rows[res.index].question4;
-                  break;
-                default:
-                  console.log("default");
-              }
+              const record_id = cell.id;
+              const score_record = searchRow(cell.id, rows);
+              const new_score_value = Number(cell.props.value);
 
-              const newData = rows[res.index];
-
-              const result = function (id, newData, rowIndex) {
-                const bodyData = {
-                  first_question: newData.question1,
-                  second_question: newData.question2,
-                  third_question: newData.question3,
-                  fourth_question: newData.question4,
-                };
-
-                fetch(urls.getResults + id + "/", {
-                  method: "PUT",
-                  headers: config.headers,
-                  body: JSON.stringify(bodyData),
-                })
-                  .then((response) => response.json())
-                  .then((response) => {
-                    const dataUpdate = [...rows];
-                    dataUpdate[rowIndex] = newData;
-                    setRows([...dataUpdate]);
-                    console.log(newData);
-                  });
-              };
-              result(cell.id, newData, res.index);
+              console.log({
+                record_id: record_id,
+                score_record: score_record,
+                new_score_value: new_score_value,
+              });
             }}
           />
         </React.StrictMode>
@@ -146,19 +87,22 @@ function ScoresTab() {
 export default ScoresTab;
 
 const columns = [
-  { field: "id", headerName: "ID", width: 100, editable: false },
-  { field: "question1", headerName: "Question 1", width: 200, editable: true },
-  { field: "question2", headerName: "Question 2", width: 200, editable: true },
-  { field: "question3", headerName: "Question 3", width: 200, editable: true },
-  { field: "question4", headerName: "Question 4", width: 200, editable: true },
-  { field: "sum", headerName: "Sum", width: 150, editable: false },
+  { field: "student", headerName: "STUDENT", width: 200, editable: false },
+  {
+    field: "year_of_study",
+    headerName: "YEAR OF STUDY",
+    width: 200,
+    editable: false,
+  },
+  { field: "semester", headerName: "SEMESTER", width: 200, editable: false },
+  { field: "score", headerName: "SCORE", width: 200, editable: true },
 ];
 
 function searchRow(idValue, myArray) {
   for (var i = 0; i < myArray.length; i++) {
     if (myArray[i].id === idValue) {
-      console.log(myArray[i]);
-      return { array: myArray[i], index: i };
+      // console.log(myArray[i]);
+      return { record: myArray[i], index: i };
     }
   }
 }

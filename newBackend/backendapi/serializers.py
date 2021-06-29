@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Result, CA_Item, Lecture_Course, Assessment
+from .models import Assessment_Results, Result, CA_Item, Lecture_Course, Assessment
 
 
 class ResultSerializer(serializers.ModelSerializer):
@@ -15,6 +15,12 @@ class CA_ItemSerializer(serializers.ModelSerializer):
         fields = ['ca_item_name']
 
 
+class LecturerCourseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Lecture_Course
+        fields = ['lecturer', 'course', 'academic_year']
+
+
 class AssessmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Assessment
@@ -22,7 +28,10 @@ class AssessmentSerializer(serializers.ModelSerializer):
                   'date_taken', 'number_of_questions', 'contribution']
 
 
-class LecturerCourseSerializer(serializers.ModelSerializer):
+class AssessmentResultsSerializer(serializers.ModelSerializer):
+    assessment = AssessmentSerializer(many=False, read_only=True)
+
     class Meta:
-        model = Lecture_Course
-        fields = ['lecturer', 'course', 'academic_year']
+        model = Assessment_Results
+        fields = ['id', 'assessment', 'semester',
+                  'course_type', 'year_of_study', 'academic_year', 'student', 'score']

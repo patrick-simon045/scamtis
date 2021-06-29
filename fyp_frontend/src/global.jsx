@@ -7,6 +7,8 @@ export const urls = {
   assessmentCriteria: baseUrl + "api/ca_items/",
   assessmentDetails: baseUrl + "api/assessments/",
   assessmentDelete: baseUrl + "api/assessments_change/",
+  getAssessmentResults: baseUrl + "api/assessment_results/",
+  updateAssessmentResult: baseUrl + "api/assessment_results_update/",
   getResults: baseUrl + "api/results/",
   updateResultCell: baseUrl + "api/results/",
 };

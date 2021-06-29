@@ -21,7 +21,8 @@ admin.site.register(Role)
 
 # admin.site.register(Result)
 class ResultAdmin(admin.ModelAdmin):
-    list_display = ('name', 'first_question', 'second_question', 'third_question', 'fourth_question', 'sum')
+    list_display = ('name', 'first_question', 'second_question',
+                    'third_question', 'fourth_question', 'sum')
     list_filter = ('name', 'first_question')
     readonly_fields = ['sum']
 
@@ -41,8 +42,10 @@ admin.site.register(Course, CourseAdmin)
 
 # admin.site.register(Program_Course)
 class Program_CourseAdmin(admin.ModelAdmin):
-    list_display = ('course', 'program', 'academic_year', 'semester', 'course_type', 'year_of_study')
-    list_filter = ('program', 'course_type', 'year_of_study', 'semester', 'academic_year')
+    list_display = ('course', 'program', 'academic_year',
+                    'semester', 'course_type', 'year_of_study')
+    list_filter = ('program', 'course_type', 'year_of_study',
+                   'semester', 'academic_year')
 
 
 admin.site.register(Program_Course, Program_CourseAdmin)
@@ -79,7 +82,8 @@ admin.site.register(Assessment, AssessmentAdmin)
 
 # admin.site.register(Assessment_Results)
 class Assessment_ResultsAdmin(admin.ModelAdmin):
-    list_display = ('assessment', 'student', 'score')
+    list_display = ('assessment', 'student', 'semester',
+                    'course_type', 'year_of_study', 'academic_year', 'score')
 
 
 admin.site.register(Assessment_Results, Assessment_ResultsAdmin)

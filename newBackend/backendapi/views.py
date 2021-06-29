@@ -8,7 +8,7 @@ from rest_framework.authtoken.models import Token
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .serializers import ResultSerializer, CA_ItemSerializer, LecturerCourseSerializer, AssessmentSerializer
+from .serializers import AssessmentResultsSerializer, ResultSerializer, CA_ItemSerializer, LecturerCourseSerializer, AssessmentSerializer
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework import authentication
@@ -27,12 +27,6 @@ class CA_ItemsViewset(viewsets.ReadOnlyModelViewSet):
     serializer_class = CA_ItemSerializer
     permission_classes = [IsAuthenticated]
 
-
-#
-#
-# lecturer details api
-#
-#
 
 def get_user_from_token(token):
     user = Token.objects.get(pk=token).user
@@ -77,6 +71,24 @@ def get_list_of_courses_for_a_lecturer(list_of_lecturer_course_instance):
     return courses
 
 
+def get_courses_as_list(token):
+    user = get_user_from_token(token)
+    lecturer = get_lecturer_from_user(user)
+    courses = get_courses_assigned_to_a_lecturer(lecturer)
+
+    courses_list = []
+    for course in courses:
+        courses_list.append(course["course_code"])
+
+    return courses_list
+
+#
+#
+# lecturer details api
+#
+#
+
+
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def lecturer_details(request):
@@ -110,6 +122,64 @@ def lecturer_details(request):
 #
 #
 # end lecturer api
+#
+#
+
+
+#
+#
+# assessment results api
+#
+#
+
+@api_view(["GET", "POST"])
+@permission_classes([IsAuthenticated])
+def assessment_results(request):
+    authorization_token = request.META.get('HTTP_AUTHORIZATION')
+    token = authorization_token[6:]
+
+    if request.method == 'GET':
+        try:
+            courses_list = get_courses_as_list(token)
+            assessments = Assessment.objects.filter(course__in=courses_list)
+            assessment_results = Assessment_Results.objects.filter(
+                assessment__in=assessments)
+            serializer = AssessmentResultsSerializer(
+                assessment_results, many=True)
+            return Response(serializer.data)
+
+        except ObjectDoesNotExist as error:
+            print("error message: {}".format(error))
+
+    elif request.method == "POST":
+        serializer = AssessmentResultsSerializer(data=request.data)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(["PUT"])
+@permission_classes([IsAuthenticated])
+def assessment_results_update(request, pk):
+    try:
+        assessment_result = Assessment_Results.objects.get(pk=pk)
+    except Assessment_Results.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    serializer = AssessmentResultsSerializer(
+        assessment_result, data=request.data)
+
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+#
+#
+# end assessment results api
 #
 #
 

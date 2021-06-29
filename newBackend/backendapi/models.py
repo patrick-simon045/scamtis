@@ -223,10 +223,16 @@ def create_results_table(sender, created=False, **kwargs):
         for program in programs:
             students = Student.objects.filter(program=program.program)
             for student in students:
-                print("course: {} programme: {} stduent: {}".format(
-                    course, program, student))
+                semester = program.semester
+                course_type = program.get_course_type_display()
+                year_of_study = program.get_year_of_study_display()
+                academic_year = program.get_academic_year_display()
+
+                print("stduent: {} course: {} programme: {} semester: {} course type: {} year of study: {} academic year: {}".format(
+                    student, course, program, semester, course_type, year_of_study, academic_year))
+
                 a = Assessment_Results.objects.create(
-                    assessment=kwargs.get('instance'), student=student)
+                    assessment=kwargs.get('instance'), student=student, semester=semester, course_type=course_type, year_of_study=year_of_study, academic_year=academic_year)
                 print(a)
 
 
@@ -246,6 +252,16 @@ class Assessment_Results(models.Model):
         'Student', related_name='assessment_result', on_delete=models.CASCADE)
     score = models.IntegerField(
         validators=[MaxValueValidator(100), MinValueValidator(0)], default=0)
+    semester = models.IntegerField(validators=[
+        MaxValueValidator(2),
+        MinValueValidator(1),
+    ], default=1)
+    course_type = models.CharField(
+        max_length=10, default='core', null=True)
+    year_of_study = models.CharField(
+        max_length=1, null=True)
+    academic_year = models.CharField(
+        max_length=9, null=True)
 
     # academic_year = models.CharField(max_length=9, choices=ACADEMIC_YEAR, default='a')
 
